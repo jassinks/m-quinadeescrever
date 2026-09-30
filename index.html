@@ -994,7 +994,7 @@
     box-shadow: 0 4px 0 #5a451b, 0 7px 10px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.45);
   }
 
-  @media (max-width: 900px), (pointer: coarse) {
+  @media (max-width: 1024px), (pointer: coarse), (hover: none) {
     :root {
       --mobile-stage-scale: .42;
       --mobile-stage-top: 58px;
@@ -1171,7 +1171,7 @@
   }
 
   @media (max-width: 350px) {
-    @media (max-width: 900px), (pointer: coarse) {
+    @media (max-width: 1024px), (pointer: coarse), (hover: none) {
       :root { --mobile-keyboard-boost: 1.58; }
       #controls { --mobile-controls-height: 50px; }
       #controls select,
@@ -1180,13 +1180,127 @@
   }
 
   @media (orientation: landscape) and (max-height: 520px) {
-    @media (max-width: 900px), (pointer: coarse) {
+    @media (max-width: 1024px), (pointer: coarse), (hover: none) {
       :root {
         --mobile-controls-height: 46px;
         --mobile-keyboard-boost: 1.58;
       }
       #controls select,
       #controls button { min-height: 31px; padding: 4px 7px !important; font-size: 10px !important; }
+    }
+  }
+
+
+
+  /* =========================================================
+     MOBILE WEB V4 — ADAPTAÇÃO UNIVERSAL DE VIEWPORT
+     Mantém a máquina original e apenas torna seu enquadramento
+     dependente da área REAL visível do navegador.
+     ========================================================= */
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --mobile-stage-center-x: 50vw;
+    --mobile-stage-top: 64px;
+  }
+
+  @media (max-width: 1024px), (pointer: coarse), (hover: none) {
+    html {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      background: var(--bg-wood-dark);
+    }
+
+    body {
+      width: 100%;
+      height: 100dvh;
+      min-height: 100dvh;
+      max-width: 100vw;
+      margin: 0;
+      padding: 0 !important;
+      overflow: hidden !important;
+      position: fixed;
+      inset: 0;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @supports not (height: 100dvh) {
+      body, #workspace { height: 100vh !important; }
+    }
+
+    #workspace {
+      width: 100vw !important;
+      height: 100dvh !important;
+      min-height: 0 !important;
+      max-width: 100vw !important;
+      position: fixed !important;
+      inset: 0 !important;
+      overflow: hidden !important;
+    }
+
+    #controls {
+      top: var(--safe-top) !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+      transform: none !important;
+      padding-left: max(8px, var(--safe-left)) !important;
+      padding-right: max(8px, var(--safe-right)) !important;
+      scrollbar-width: none;
+      overscroll-behavior-x: contain;
+    }
+
+    #typewriter-stage {
+      left: var(--mobile-stage-center-x) !important;
+      top: var(--mobile-stage-top) !important;
+      transform: translateX(-50%) scale(var(--mobile-stage-scale)) !important;
+      transform-origin: top center !important;
+      will-change: transform, top, left;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Evita seleção, zoom acidental e menus de toque nas teclas. */
+    #keyboard-container,
+    #keyboard,
+    .key,
+    #format-levers,
+    .lever {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .key,
+    .lever {
+      touch-action: manipulation;
+    }
+
+    /* Em telas extremamente estreitas, reduz só o reforço interno
+       do teclado para impedir que as teclas escapem pelas laterais. */
+    @media (max-width: 319px) {
+      :root { --mobile-keyboard-boost: 1.48; }
+    }
+
+    /* Paisagem muito baixa: libera o máximo de área vertical útil. */
+    @media (orientation: landscape) and (max-height: 360px) {
+      :root {
+        --mobile-controls-height: 44px;
+        --mobile-keyboard-boost: 1.52;
+      }
+      #controls select,
+      #controls button {
+        min-height: 29px !important;
+        padding: 3px 6px !important;
+        font-size: 9px !important;
+      }
     }
   }
 
@@ -2047,34 +2161,81 @@
   let mobileLayoutRaf = 0;
 
   function mobileModeActive() {
-    return window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
+    const vv = window.visualViewport;
+    const vw = vv ? vv.width : window.innerWidth;
+    const vh = vv ? vv.height : window.innerHeight;
+    const coarse = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+    const touch = (navigator.maxTouchPoints || 0) > 0;
+
+    // 1024 px cobre praticamente todos os celulares em paisagem.
+    // O teste de toque garante o modo móvel em aparelhos que reportam
+    // uma largura maior por causa de DPR/viewport peculiar.
+    return vw <= 1024 || (touch && coarse && Math.min(vw, vh) <= 700);
+  }
+
+  function cssPx(name) {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const parsed = parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
   }
 
   function applyResponsiveLayout() {
+    const root = document.documentElement;
+
     if (!mobileModeActive()) {
-      document.documentElement.style.removeProperty('--mobile-stage-scale');
-      document.documentElement.style.removeProperty('--mobile-stage-top');
+      root.style.removeProperty('--mobile-stage-scale');
+      root.style.removeProperty('--mobile-stage-top');
+      root.style.removeProperty('--mobile-stage-center-x');
       return;
     }
 
     const vv = window.visualViewport;
-    const vw = Math.max(240, vv ? vv.width : window.innerWidth);
-    const vh = Math.max(320, vv ? vv.height : window.innerHeight);
-    const css = getComputedStyle(document.documentElement);
-    const controlsH = parseFloat(css.getPropertyValue('--mobile-controls-height')) || 54;
-    const safeTop = 0;
-    const safeBottom = 0;
-    const horizontalGap = 6;
-    const verticalGap = 8;
-    const availableH = Math.max(160, vh - controlsH - verticalGap - safeTop - safeBottom);
-    const byWidth = (vw - horizontalGap * 2) / 900;
-    const byHeight = availableH / 680;
-    const scale = Math.max(.24, Math.min(1, byWidth, byHeight));
-    const renderedH = 680 * scale;
-    const top = controlsH + verticalGap + Math.max(0, (availableH - renderedH) / 2);
+    const viewportLeft = vv ? vv.offsetLeft : 0;
+    const viewportTop = vv ? vv.offsetTop : 0;
+    const viewportWidth = Math.max(220, vv ? vv.width : window.innerWidth);
+    const viewportHeight = Math.max(260, vv ? vv.height : window.innerHeight);
+    const viewportRight = viewportLeft + viewportWidth;
+    const viewportBottom = viewportTop + viewportHeight;
 
-    document.documentElement.style.setProperty('--mobile-stage-scale', scale.toFixed(4));
-    document.documentElement.style.setProperty('--mobile-stage-top', `${Math.round(top)}px`);
+    const safeLeft = cssPx('--safe-left');
+    const safeRight = cssPx('--safe-right');
+    const safeBottom = cssPx('--safe-bottom');
+
+    const controls = document.getElementById('controls');
+    const controlsRect = controls ? controls.getBoundingClientRect() : { bottom: viewportTop + 54 };
+
+    // Margens reais em pixels de tela. Não são ampliadas/reduzidas junto
+    // com a máquina, então o objeto nunca cola no notch ou nas bordas.
+    const sideGap = 6;
+    const topGap = 8;
+    const bottomGap = 10;
+
+    const usableLeft = viewportLeft + Math.max(sideGap, safeLeft + 2);
+    const usableRight = viewportRight - Math.max(sideGap, safeRight + 2);
+    const usableTop = Math.max(viewportTop, controlsRect.bottom) + topGap;
+    const usableBottom = viewportBottom - Math.max(bottomGap, safeBottom + 4);
+
+    const availableWidth = Math.max(120, usableRight - usableLeft);
+    const availableHeight = Math.max(120, usableBottom - usableTop);
+
+    // Dimensões-base da composição. O teclado reforçado continua dentro
+    // deste envelope e a folga lateral evita cortes por arredondamento.
+    const DESIGN_WIDTH = 912;
+    const DESIGN_HEIGHT = 684;
+
+    const byWidth = availableWidth / DESIGN_WIDTH;
+    const byHeight = availableHeight / DESIGN_HEIGHT;
+    const scale = Math.max(0.12, Math.min(1, byWidth, byHeight));
+    const renderedHeight = DESIGN_HEIGHT * scale;
+
+    // Centraliza na área realmente visível, e não no layout viewport antigo.
+    const centerX = usableLeft + availableWidth / 2;
+    const extraY = Math.max(0, availableHeight - renderedHeight);
+    const top = usableTop + extraY / 2;
+
+    root.style.setProperty('--mobile-stage-scale', scale.toFixed(5));
+    root.style.setProperty('--mobile-stage-center-x', `${centerX.toFixed(2)}px`);
+    root.style.setProperty('--mobile-stage-top', `${top.toFixed(2)}px`);
   }
 
   function scheduleResponsiveLayout() {
@@ -2086,7 +2247,12 @@
   window.addEventListener('orientationchange', () => setTimeout(applyResponsiveLayout, 100), { passive: true });
   if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', scheduleResponsiveLayout, { passive: true });
+    window.visualViewport.addEventListener('scroll', scheduleResponsiveLayout, { passive: true });
   }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) setTimeout(applyResponsiveLayout, 50);
+  });
 
   // Restaura da nuvem local
 
