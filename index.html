@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+
+<title>Estação de Trabalho - Máquina de Escrever Hiper-Realista</title>
+
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime&family=Cutive+Mono&family=Lora:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+
+
+  :root {
+
+    --bg-wood-dark: #1f1109;
+
+    --bg-wood-light: #3d2314;
+
+    --ink-color: #16171f;
+
+  }
+
+
+
+  body {
+
+    /* Textura rica de madeira com iluminação de abajur */
+
+    background-color: var(--bg-wood-dark);
+
+    background-image: 
+
+      radial-gradient(circle at 50% 30%, rgba(255, 220, 150, 0.15) 0%, rgba(0, 0, 0, 0.9) 100%),
+
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 10px),
+
+      linear-gradient(to right, var(--bg-wood-dark), var(--bg-wood-light), var(--bg-wood-dark));
+
+    margin: 0; overflow: hidden;
+
+    font-family: 'Special Elite', monospace;
+
+    display: flex; flex-direction: column; align-items: center;
+
+    height: 100vh; user-select: none; color: #e0e0e0;
+
+  }
+
+
+
+  svg { position: absolute; width: 0; height: 0; }
+
+
+
+  /* Filtros Ocultos para Texturas */
+
+  .svg-filters { width: 0; height: 0; position: absolute; z-index: -1; }
+
+
+
+  /* Detalhes Realistas da Mesa */
+
+  #desk-pad {
+
+    position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+
+    width: 1150px; height: 650px; 
+
+    background: #18241c; /* Couro Verde Escuro */
+
+    border-radius: 20px; 
+
+    /* Efeito de costura no couro */
+
+    border: 2px dashed rgba(255,255,255,0.1);
+
+    box-shadow: 
+
+      0 0 0 10px #131c15,
+
+      inset 0 0 60px rgba(0,0,0,0.9), 
+
+      0 15px 35px rgba(0,0,0,0.95);
+
+    z-index: 1;
+
+  }
+
+
+
+  /* Xícara de Café */
+
+  #coffee-mug {
+
+    position: absolute; top: 60px; right: 15%; width: 85px; height: 85px;
+
+    background: #e6dfcf; border-radius: 50%; border: 6px solid #faf5e6;
+
+    box-shadow: 20px 20px 30px rgba(0,0,0,0.9), inset -8px -8px 20px rgba(0,0,0,0.5);
+
+    z-index: 5;
+
+  }
+
+  #coffee-mug::before {
+
+    /* Líquido do café */
+
+    content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
+
+    background: #170902; border-radius: 50%; 
+
+    box-shadow: inset 4px 4px 10px rgba(0,0,0,0.9);
+
+  }
+
+  #coffee-mug::after {
+
+    /* Reflexo na superfície do café */
+
+    content: ''; position: absolute; top: 18px; left: 25px; width: 12px; height: 4px;
+
+    background: rgba(255,255,255,0.25); border-radius: 50%; transform: rotate(-30deg);
+
+  }
+
+  /* Mancha de café na mesa */
+
+  #coffee-stain {
+
+    position: absolute; top: 120px; right: 19%; width: 65px; height: 65px;
+
+    border-radius: 50%; border: 4px solid rgba(43, 19, 8, 0.4); filter: blur(2px);
+
+    z-index: 4; pointer-events: none;
+
+  }
+
+
+
+  #scattered-pencil {
+
+    position: absolute; bottom: 60px; right: 20%; width: 160px; height: 10px;
+
+    background: linear-gradient(to bottom, #d99a2b, #a67216); border-radius: 2px;
+
+    transform: rotate(-15deg); box-shadow: 8px 15px 15px rgba(0,0,0,0.8); z-index: 5;
+
+  }
+
+  #scattered-pencil::after {
+
+    content: ''; position: absolute; left: -20px; top: 0;
+
+    border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-right: 20px solid #d4c19c;
+
+  }
+
+  #scattered-pencil::before {
+
+    content: ''; position: absolute; left: -20px; top: 3.5px; width: 5px; height: 3px; background: #1a1a1a;
+
+  }
+
+
+
+  /* UI Superior (Controles) */
+
+  #controls {
+
+    position: absolute; top: 15px; display: flex; gap: 8px; z-index: 1000;
+
+    background: rgba(10, 10, 10, 0.85); padding: 12px 25px; border-radius: 10px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.8); backdrop-filter: blur(8px); align-items: center;
+
+    border: 1px solid #333;
+
+  }
+
+  select, button {
+
+    font-family: 'Courier Prime', monospace; font-size: 13px; padding: 7px 14px;
+
+    background: linear-gradient(to bottom, #dedbd0, #b5b1a3); border: 1px solid #111; border-radius: 5px;
+
+    cursor: pointer; box-shadow: 0 3px 0 #555, inset 0 1px 1px #fff; 
+
+    font-weight: bold; color: #222; transition: all 0.1s;
+
+  }
+
+  select:focus, button:active, button.active { 
+
+    transform: translateY(3px); box-shadow: 0 0 0 #222, inset 0 2px 4px rgba(0,0,0,0.5); outline: none; 
+
+  }
+
+  button.action { background: linear-gradient(to bottom, #609bc2, #397094); color: #fff; text-shadow: 1px 1px 0 #111;}
+
+  button.pencil { background: linear-gradient(to bottom, #e3a73b, #b37e1b); color: #111; }
+
+  button.hand { background: linear-gradient(to bottom, #d18d8d, #a35656); color: #fff; text-shadow: 1px 1px 0 #111;}
+
+
+
+  #workspace { display: flex; width: 100vw; height: 100vh; justify-content: center; align-items: flex-start; }
+
+  #desk-stack { position: absolute; left: 50px; top: 120px; width: 220px; min-height: 300px; display: flex; flex-direction: column; gap: -150px; z-index: 50; }
+
+
+
+  /* Lixeira Metálica */
+
+  #trash-can {
+
+    position: absolute; left: 50px; bottom: 30px; width: 140px; height: 160px;
+
+    background: repeating-linear-gradient(90deg, #222, #222 10px, #1a1a1a 10px, #1a1a1a 20px);
+
+    border: 6px solid #050505; border-radius: 10px 10px 45px 45px;
+
+    display: flex; justify-content: center; align-items: center;
+
+    box-shadow: inset 0 25px 25px rgba(0,0,0,0.95), 0 20px 30px rgba(0,0,0,0.95);
+
+    z-index: 45; transition: transform 0.2s, border-color 0.2s;
+
+  }
+
+  #trash-can.drag-over { transform: scale(1.05); border-color: #a35656; box-shadow: inset 0 25px 25px rgba(0,0,0,0.95), 0 0 30px rgba(163, 86, 86, 0.5); }
+
+  #trash-can::after { content: 'LIXEIRA'; color: #000; font-size: 18px; font-weight: bold; letter-spacing: 3px; text-shadow: 0 1px 0 rgba(255,255,255,0.1); }
+
+
+
+  /* =========================================
+
+     ARQUITETURA DA MÁQUINA DE ESCREVER 3D
+
+  ========================================== */
+
+  #typewriter-stage {
+
+    position: relative; width: 900px; height: 600px; margin-top: 100px;
+
+    display: flex; justify-content: center; z-index: 10;
+
+  }
+
+
+
+  /* Base/Chassi Completo da Máquina (A parte de baixo que faltava) */
+
+  #machine-base {
+
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+
+    width: 880px; height: 280px;
+
+    background: linear-gradient(145deg, #2c2c2c, #0d0d0d);
+
+    border-radius: 40px; border-bottom: 25px solid #050505;
+
+    box-shadow: 0 40px 60px rgba(0,0,0,0.95), inset 0 5px 15px rgba(255,255,255,0.05);
+
+    z-index: 5;
+
+  }
+
+  /* Tampo metálico cobrindo a mecânica interna superior */
+
+  #machine-cowl {
+
+    position: absolute; top: 160px; left: 50%; transform: translateX(-50%);
+
+    width: 760px; height: 180px;
+
+    background: linear-gradient(to bottom, #111, #252525);
+
+    border-top-left-radius: 50px; border-top-right-radius: 50px;
+
+    box-shadow: inset 0 10px 20px rgba(255,255,255,0.05), 0 -10px 30px rgba(0,0,0,0.8);
+
+    z-index: 30; border-top: 2px solid #444;
+
+  }
+
+
+
+  /* Abertura do Carro (Mecânica visual) */
+
+  #machine-guts {
+
+    position: absolute; top: 165px; left: 50%; transform: translateX(-50%);
+
+    width: 650px; height: 120px; background: #000; z-index: 15;
+
+    border-radius: 10px; box-shadow: inset 0 20px 30px rgba(0,0,0,1);
+
+    background-image: repeating-linear-gradient(90deg, #111, #111 2px, #000 2px, #000 8px);
+
+  }
+
+
+
+  /* Alavancas de Formatação (Botões Laterais Físicos) */
+
+  #format-levers {
+
+    position: absolute; left: -20px; top: 220px; display: flex; flex-direction: column; gap: 15px; z-index: 35;
+
+  }
+
+  .lever {
+
+    width: 42px; height: 42px; border-radius: 50%; 
+
+    background: radial-gradient(circle at 30% 30%, #e0e0e0, #666);
+
+    border: 4px solid #111; box-shadow: 8px 12px 15px rgba(0,0,0,0.9);
+
+    font-family: serif; font-weight: bold; font-size: 18px; color: #111; cursor: pointer;
+
+    transition: transform 0.1s, box-shadow 0.1s; display: flex; justify-content: center; align-items: center;
+
+  }
+
+  .lever:active, .lever.active {
+
+    transform: translateY(5px); box-shadow: 2px 4px 5px rgba(0,0,0,0.9), inset 0 5px 10px rgba(0,0,0,0.7);
+
+    background: radial-gradient(circle at 30% 30%, #aaa, #333); color: #fff;
+
+  }
+
+
+
+  /* Cilindro (Roller) e Botões (Knobs) */
+
+  #carriage { 
+
+    position: absolute; top: 190px; left: 50%; 
+
+    transition: transform 0.15s cubic-bezier(0.1, 0.7, 0.3, 1); z-index: 25; 
+
+  }
+
+
+
+  #roller-assembly {
+
+    position: absolute; top: 190px; left: 50%; transform: translateX(-50%);
+
+    width: 720px; height: 45px; z-index: 20;
+
+    display: flex; justify-content: center; align-items: center;
+
+  }
+
+
+
+  .roller-knob {
+
+    width: 35px; height: 50px; background: linear-gradient(to bottom, #333, #111, #333);
+
+    border: 2px solid #000; border-radius: 5px; box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+
+    transition: transform 0.1s; z-index: 22;
+
+  }
+
+
+
+  #roller-cylinder {
+
+    width: 650px; height: 45px;
+
+    background: linear-gradient(to bottom, #1a1a1a 0%, #3a3a3a 30%, #050505 100%);
+
+    border-radius: 10px; box-shadow: 0 25px 40px rgba(0,0,0,0.95); z-index: 20;
+
+  }
+
+
+
+  #ribbon-guide {
+
+    position: absolute; top: 200px; left: 50%; transform: translateX(-50%); width: 14px; height: 26px;
+
+    background: rgba(180, 20, 20, 0.7); border: 1px solid rgba(255,0,0,0.5); z-index: 28; border-radius: 2px;
+
+    box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+
+  }
+
+
+
+  /* Prendedor de Papel (Paper Bail) com Rodinhas */
+
+  #paper-bail {
+
+    position: absolute; top: 175px; left: 50%; transform: translateX(-50%); width: 620px; height: 10px;
+
+    background: linear-gradient(to bottom, #e6e6e6, #777, #333); border-radius: 5px; z-index: 29; 
+
+    box-shadow: 0 12px 20px rgba(0,0,0,0.8); display: flex; justify-content: space-around; align-items: center;
+
+  }
+
+  .bail-roller { 
+
+    width: 18px; height: 22px; background: linear-gradient(to right, #111, #333, #111); 
+
+    border-radius: 4px; box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), 0 4px 8px rgba(0,0,0,0.9); 
+
+  }
+
+
+
+  /* Papel Principal */
+
+  .paper { 
+
+    position: absolute; top: 0; left: 0; box-shadow: 0 10px 40px rgba(0,0,0,0.7); 
+
+    border: 1px solid rgba(0,0,0,0.2); transform-origin: top left; transition: transform 0.1s;
+
+  }
+
+
+
+  /* Tinta e Formatações */
+
+  .char {
+
+    position: absolute; color: var(--ink-color); font-size: 20px; line-height: 24px; width: 12.5px; text-align: center;
+
+    pointer-events: none; opacity: 0.85; filter: url(#ink-bleed);
+
+  }
+
+  .char.bold { font-weight: bold; filter: url(#ink-bleed) brightness(0.6); text-shadow: 0.5px 0.5px 0 rgba(0,0,0,0.5); }
+
+  .char.italic { font-style: italic; transform: skewX(-10deg); }
+
+  .char.underline { text-decoration: underline; text-decoration-thickness: 1.5px; text-decoration-color: var(--ink-color); text-underline-offset: 3px; }
+
+
+
+  /* Texturas Orgânicas do Papel */
+
+  .texture-standard { background: #f4f0e6; }
+
+  .texture-aged { 
+
+    background-color: #dfcdad; 
+
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.08"/></svg>');
+
+    box-shadow: inset 0 0 100px rgba(100,60,20,0.4), 0 5px 25px rgba(0,0,0,0.5); 
+
+  }
+
+  .texture-recycled { 
+
+    background-color: #d1cbbd; 
+
+    background-image: 
+
+      radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+
+      radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+
+    background-size: 5px 5px, 8px 8px; background-position: 0 0, 2.5px 2.5px;
+
+  }
+
+  .texture-parchment { 
+
+    background-color: #e6cd9e; 
+
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="5" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.12"/></svg>');
+
+  }
+
+
+
+  /* Tamanhos */
+
+  .size-a4 { width: 500px; min-height: 700px; }
+
+  .size-letter { width: 550px; min-height: 650px; }
+
+  .size-note { width: 350px; min-height: 450px; }
+
+
+
+  /* Minatura na Mesa */
+
+  .paper.stacked { 
+
+    position: relative; transform: scale(0.35) rotate(-5deg); cursor: grab; 
+
+    margin-bottom: -400px; transition: transform 0.3s, z-index 0.3s; z-index: 1; border: 3px solid transparent; 
+
+  }
+
+  .paper.stacked:hover { transform: scale(0.38) rotate(-2deg) translateY(-20px); z-index: 100; border-color: #609bc2; }
+
+  .paper.stacked:active { cursor: grabbing; }
+
+
+
+  /* Animação do Papel sendo Arrancado à força */
+
+  @keyframes manual-rip {
+
+    0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+
+    20% { transform: translateY(-50px) scale(1.02) rotate(-2deg); }
+
+    100% { transform: translateY(-1500px) scale(0.8) rotate(35deg); opacity: 0; }
+
+  }
+
+  .tearing-manual { animation: manual-rip 0.5s cubic-bezier(0.8, 0, 0.2, 1) forwards !important; pointer-events: none;}
+
+
+
+  /* Teclado Visual Realista */
+
+  #keyboard-container { position: absolute; bottom: 50px; z-index: 40; perspective: 900px; }
+
+  #keyboard { display: flex; flex-direction: column; align-items: center; gap: 10px; transform: rotateX(25deg); }
+
+  .key-row { display: flex; gap: 10px; }
+
+  .key { 
+
+    width: 46px; height: 46px; background: radial-gradient(circle at 30% 30%, #f0f0f0, #c0c0c0); 
+
+    border: 4px solid #555; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+
+    color: #111; font-weight: bold; font-family: 'Courier Prime', monospace; font-size: 16px; 
+
+    box-shadow: 0 8px 0 #333, 0 12px 15px rgba(0,0,0,0.8); transition: transform 0.05s, box-shadow 0.05s; 
+
+  }
+
+  .key.pressed { transform: translateY(8px); box-shadow: 0 0 0 #333, 0 2px 4px rgba(0,0,0,0.6); background: #b0b0b0; }
+
+  .key.spacebar { width: 350px; border-radius: 12px; }
+
+  .key.wide { width: 95px; border-radius: 12px; font-size: 12px;}
+
+
+
+  /* ===== APRIMORAMENTOS DE INTERFACE E CHASSI ===== */
+  html { min-height: 100%; background: var(--bg-wood-dark); }
+  body {
+    min-height: 100vh;
+    height: auto;
+    overflow: auto;
+    box-sizing: border-box;
+    padding-bottom: 24px;
+  }
+
+  #controls {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 10px;
+    box-sizing: border-box;
+  }
+
+  #controls select,
+  #controls button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  button.danger {
+    background: linear-gradient(to bottom, #d86b67, #8e302d);
+    color: #fff;
+    border-color: #42110f;
+    text-shadow: 1px 1px 0 #3b0d0c;
+  }
+
+  button.danger:hover {
+    filter: brightness(1.08);
+  }
+
+  #workspace {
+    min-height: 790px;
+    height: auto;
+    position: relative;
+  }
+
+  #typewriter-stage {
+    height: 650px;
+    margin-top: 125px;
+    isolation: isolate;
+  }
+
+  /* Base inferior redesenhada para formar um corpo contínuo. */
+  #machine-base {
+    bottom: 18px;
+    width: 890px;
+    height: 315px;
+    border-radius: 48px 48px 58px 58px;
+    border: 1px solid #333;
+    border-bottom: 26px solid #050505;
+    background:
+      radial-gradient(ellipse at 50% 8%, rgba(255,255,255,.07), transparent 45%),
+      linear-gradient(145deg, #292929 0%, #151515 47%, #080808 100%);
+    box-shadow:
+      0 42px 65px rgba(0,0,0,.9),
+      inset 0 6px 16px rgba(255,255,255,.05),
+      inset 0 -24px 34px rgba(0,0,0,.8);
+  }
+
+  /* Mesa inclinada entre o corpo superior e o teclado. */
+  #machine-deck {
+    position: absolute;
+    top: 320px;
+    left: 50%;
+    transform: translateX(-50%) perspective(700px) rotateX(56deg);
+    transform-origin: top center;
+    width: 820px;
+    height: 150px;
+    z-index: 31;
+    border-radius: 18px 18px 42px 42px;
+    border: 1px solid #3a3a3a;
+    background:
+      linear-gradient(to bottom, #272727 0%, #151515 55%, #090909 100%);
+    box-shadow:
+      inset 0 10px 16px rgba(255,255,255,.04),
+      0 22px 30px rgba(0,0,0,.75);
+    pointer-events: none;
+  }
+
+  /* Painel frontal completa a parte de baixo da máquina. */
+  #machine-front-panel {
+    position: absolute;
+    left: 50%;
+    bottom: 42px;
+    transform: translateX(-50%);
+    width: 820px;
+    height: 230px;
+    z-index: 32;
+    clip-path: polygon(5% 0, 95% 0, 100% 88%, 96% 100%, 4% 100%, 0 88%);
+    border-radius: 24px 24px 48px 48px;
+    background:
+      radial-gradient(ellipse at 50% 4%, rgba(255,255,255,.055), transparent 38%),
+      linear-gradient(to bottom, #202020 0%, #111 60%, #090909 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.12),
+      inset 0 -28px 38px rgba(0,0,0,.65),
+      0 24px 30px rgba(0,0,0,.55);
+    pointer-events: none;
+  }
+
+  #machine-front-panel::before {
+    content: '';
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 22px;
+    height: 5px;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, #050505, #303030);
+    box-shadow: 0 1px 0 rgba(255,255,255,.06);
+  }
+
+  #machine-front-panel::after {
+    content: 'CLASSIC';
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    font-family: Georgia, serif;
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: #777;
+    text-shadow: 0 1px 0 #000;
+  }
+
+  #machine-feet {
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    transform: translateX(-50%);
+    width: 760px;
+    height: 34px;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  #machine-feet::before,
+  #machine-feet::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 120px;
+    height: 25px;
+    border-radius: 5px 5px 16px 16px;
+    background: linear-gradient(to bottom, #141414, #020202);
+    box-shadow: 0 10px 14px rgba(0,0,0,.9);
+  }
+  #machine-feet::before { left: 42px; }
+  #machine-feet::after  { right: 42px; }
+
+  /* O teclado agora pertence fisicamente ao chassi, em vez de flutuar na página. */
+  #keyboard-container {
+    position: absolute;
+    left: 50%;
+    bottom: 66px;
+    transform: translateX(-50%);
+    z-index: 40;
+    perspective: 900px;
+  }
+
+  #keyboard {
+    transform: rotateX(24deg) translateZ(1px);
+  }
+
+  /* Janela de visualização do papel: mostra apenas a área que realmente sai da máquina. */
+  #paper-window {
+    position: absolute;
+    top: 88px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 620px;
+    height: 136px;
+    overflow: hidden;
+    z-index: 33;
+    border-radius: 6px 6px 0 0;
+    box-shadow: inset 0 -18px 18px rgba(0,0,0,.18);
+  }
+
+  #paper-window::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 18px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.12));
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* O ponto de escrita fica fixo dentro da janela, e o papel se move por trás dela. */
+  #carriage {
+    position: absolute;
+    left: 50%;
+    top: 86px;
+    transition: transform 0.15s cubic-bezier(0.1, 0.7, 0.3, 1);
+    z-index: 1;
+  }
+
+  /* Pequena proteção na linha de impressão, alinhada à borda inferior do papel visível. */
+  #print-line-mask {
+    position: absolute;
+    top: 222px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 610px;
+    height: 7px;
+    z-index: 39;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, #050505, #272727);
+    box-shadow: 0 4px 7px rgba(0,0,0,.7);
+    pointer-events: none;
+  }
+
+  /* Papel e componentes do rolo precisam ficar em camadas corretas. */
+  #ribbon-guide { z-index: 38; }
+  #paper-bail { z-index: 37; }
+  #roller-assembly { z-index: 36; }
+  #machine-cowl { z-index: 30; }
+
+  .paper {
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  /* Em telas menores a barra quebra linha sem esconder ações. */
+  @media (max-width: 1180px) {
+    #controls { max-width: calc(100vw - 16px); padding: 10px 12px; }
+    #controls select, #controls button { font-size: 12px; padding: 6px 10px; }
+    #typewriter-stage { margin-top: 145px; }
+  }
+
+
+
+  /* =========================================================
+     CORREÇÃO V3 — PAPEL REALMENTE ALIMENTADO PELA MÁQUINA
+     A folha inteira continua existindo, mas somente o trecho
+     que já passou pelo rolo fica visível. O restante permanece
+     escondido dentro do chassi, como em uma máquina real.
+  ========================================================== */
+
+  #typewriter-stage {
+    height: 680px;
+    margin-top: 118px;
+    overflow: visible;
+  }
+
+  /* Corpo mais baixo e profundo: o teclado passa a ficar na frente,
+     e não na mesma altura da folha. */
+  #machine-base {
+    bottom: 0;
+    width: 890px;
+    height: 365px;
+    border-radius: 50px 50px 62px 62px;
+  }
+
+  #machine-feet {
+    bottom: -12px;
+  }
+
+  #machine-deck {
+    top: 330px;
+    width: 825px;
+    height: 180px;
+    transform: translateX(-50%) perspective(760px) rotateX(58deg);
+    z-index: 31;
+  }
+
+  #machine-front-panel {
+    bottom: 22px;
+    width: 825px;
+    height: 270px;
+    z-index: 32;
+  }
+
+  /* A cobertura superior começa DEPOIS do rolo. Assim ela esconde
+     fisicamente o restante da folha que ainda está dentro da máquina. */
+  #machine-cowl {
+    top: 218px;
+    width: 770px;
+    height: 155px;
+    z-index: 35;
+    border-radius: 24px 24px 8px 8px;
+  }
+
+  #machine-guts {
+    top: 204px;
+    height: 118px;
+    z-index: 14;
+  }
+
+  /* Rolo e prendedor ficam na frente do papel, como devem ficar. */
+  #roller-assembly {
+    top: 188px;
+    z-index: 38;
+  }
+
+  #paper-bail {
+    top: 171px;
+    z-index: 40;
+  }
+
+  #ribbon-guide {
+    top: 184px;
+    z-index: 42;
+  }
+
+  /* A janela NÃO é uma janela gráfica: é apenas o recorte físico por onde
+     enxergamos o trecho da página que já saiu da máquina. */
+  #paper-window {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 620px;
+    height: 224px;
+    overflow: hidden !important;
+    clip-path: inset(0 0 0 0);
+    contain: paint;
+    z-index: 18;
+    border-radius: 0;
+    box-shadow: none;
+    pointer-events: auto;
+  }
+
+  #paper-window::before,
+  #paper-window::after {
+    display: none;
+  }
+
+  /* O ponto de datilografia fica fixo. É o PAPEL que se desloca.
+     Com PAPER_MARGIN_Y=60, top=165 faz a linha corrente permanecer
+     visualmente na mesma altura enquanto linhas anteriores sobem. */
+  #carriage {
+    position: absolute;
+    left: 50%;
+    top: 135px;
+    z-index: 1;
+    transition: transform 0.13s cubic-bezier(.15,.75,.25,1);
+  }
+
+  #paper-window .paper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: visible;
+    box-shadow: 0 7px 20px rgba(0,0,0,.36);
+  }
+
+  /* Esta máscara acompanha o encontro do papel com o mecanismo. */
+  #print-line-mask {
+    top: 215px;
+    width: 625px;
+    height: 12px;
+    z-index: 43;
+    background: linear-gradient(to bottom, #282828 0%, #080808 55%, #000 100%);
+    box-shadow: 0 5px 9px rgba(0,0,0,.8);
+  }
+
+  /* Teclado definitivamente na metade inferior do corpo. */
+  #keyboard-container {
+    left: 50%;
+    bottom: 8px;
+    transform: translateX(-50%);
+    z-index: 48;
+    perspective: 1000px;
+  }
+
+  #keyboard {
+    transform: rotateX(20deg) scale(.92);
+    transform-origin: bottom center;
+    gap: 9px;
+  }
+
+  .key-row { gap: 9px; }
+
+  /* Evita que uma folha ativa jamais escape do recorte e cubra teclado/chassi. */
+  #paper-window > #carriage,
+  #paper-window > #carriage > .paper {
+    max-height: none;
+  }
+
+  /* Nas folhas guardadas na mesa, volta ao comportamento normal e não herda
+     nenhuma limitação visual da alimentação da máquina. */
+  #desk-stack .paper.stacked {
+    overflow: visible;
+  }
+
+  @media (max-height: 760px) {
+    #typewriter-stage {
+      margin-top: 108px;
+      transform: scale(.93);
+      transform-origin: top center;
+    }
+  }
+
+
+  /* =========================================================
+     MOBILE WEB — versão estável sem teclado duplicado
+     A própria máquina é o teclado. Nenhum input/textarea é usado,
+     então tocar nas teclas não abre o teclado virtual do aparelho.
+  ========================================================== */
+  .key {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .key.utility.active,
+  .key.symbol.active {
+    background: radial-gradient(circle at 30% 30%, #f1d88b, #b68b2f 72%);
+    box-shadow: 0 4px 0 #5a451b, 0 7px 10px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.45);
+  }
+
+  @media (max-width: 900px), (pointer: coarse) {
+    :root {
+      --mobile-stage-scale: .42;
+      --mobile-stage-top: 58px;
+      --mobile-controls-height: 54px;
+      --mobile-keyboard-boost: 1.65;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow: hidden !important;
+      overscroll-behavior: none;
+      -webkit-text-size-adjust: 100%;
+      background: var(--bg-wood-dark);
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+      padding: 0 !important;
+      min-height: 100dvh;
+      height: 100dvh;
+    }
+
+    #workspace {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100dvh !important;
+      min-height: 0 !important;
+      overflow: hidden;
+    }
+
+    #desk-pad {
+      position: fixed;
+      left: 5px;
+      right: 5px;
+      top: calc(env(safe-area-inset-top) + var(--mobile-controls-height) + 4px);
+      bottom: calc(env(safe-area-inset-bottom) + 5px);
+      width: auto;
+      height: auto;
+      transform: none;
+      border-radius: 16px;
+    }
+
+    #coffee-mug,
+    #coffee-stain,
+    #scattered-pencil,
+    #trash-can,
+    #desk-stack {
+      display: none !important;
+    }
+
+    #controls {
+      position: fixed !important;
+      z-index: 5000 !important;
+      top: env(safe-area-inset-top) !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: var(--mobile-controls-height);
+      box-sizing: border-box;
+      transform: none !important;
+      margin: 0 !important;
+      padding: 7px max(8px, env(safe-area-inset-right)) 9px max(8px, env(safe-area-inset-left)) !important;
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      justify-content: flex-start !important;
+      align-items: center;
+      gap: 6px !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-radius: 0 0 10px 10px !important;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+    }
+
+    #controls::-webkit-scrollbar { display: none; }
+
+    #controls select,
+    #controls button {
+      flex: 0 0 auto;
+      min-height: 36px;
+      padding: 6px 9px !important;
+      font-size: 11px !important;
+      white-space: nowrap;
+      touch-action: manipulation;
+    }
+
+    /* Uma única camada visual. Ela é dimensionada por JS conforme a tela. */
+    #typewriter-stage {
+      position: fixed !important;
+      z-index: 20;
+      width: 900px !important;
+      height: 680px !important;
+      left: 50% !important;
+      top: var(--mobile-stage-top) !important;
+      margin: 0 !important;
+      transform: translateX(-50%) scale(var(--mobile-stage-scale)) !important;
+      transform-origin: top center !important;
+      overflow: visible !important;
+    }
+
+    #format-levers {
+      left: 0 !important;
+    }
+
+    /* O teclado continua preso ao chassi, mas recebe um reforço de tamanho
+       antes da escala geral para manter alvos de toque utilizáveis. */
+    #keyboard-container {
+      bottom: 4px !important;
+      transform: translateX(-50%) scale(var(--mobile-keyboard-boost)) !important;
+      transform-origin: bottom center !important;
+      z-index: 60 !important;
+      pointer-events: auto !important;
+    }
+
+    #keyboard {
+      gap: 3px !important;
+      transform: rotateX(18deg) !important;
+    }
+
+    .key-row {
+      gap: 2px !important;
+    }
+
+    .key {
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+      min-height: 48px !important;
+      border-width: 3px !important;
+      font-size: 14px !important;
+      box-shadow: 0 5px 0 #333, 0 8px 9px rgba(0,0,0,.72) !important;
+    }
+
+    .key.wide {
+      width: 60px !important;
+      min-width: 60px !important;
+      border-radius: 10px !important;
+      font-size: 9px !important;
+    }
+
+    .key.spacebar {
+      width: 230px !important;
+      min-width: 230px !important;
+      border-radius: 10px !important;
+    }
+
+    .key.symbol {
+      font-size: 16px !important;
+    }
+
+    .key.pressed {
+      transform: translateY(5px) !important;
+      box-shadow: 0 0 0 #333, 0 2px 3px rgba(0,0,0,.65) !important;
+    }
+
+    /* Papel: gesto só é capturado quando uma ferramenta manual está ativa. */
+    body.tool-pencil #paper-window,
+    body.tool-hand #paper-window,
+    body.tool-pencil .paper,
+    body.tool-hand .paper {
+      touch-action: none !important;
+    }
+
+    body:not(.tool-pencil):not(.tool-hand) #paper-window {
+      touch-action: manipulation;
+    }
+  }
+
+  @media (max-width: 350px) {
+    @media (max-width: 900px), (pointer: coarse) {
+      :root { --mobile-keyboard-boost: 1.58; }
+      #controls { --mobile-controls-height: 50px; }
+      #controls select,
+      #controls button { min-height: 32px; padding: 5px 7px !important; font-size: 10px !important; }
+    }
+  }
+
+  @media (orientation: landscape) and (max-height: 520px) {
+    @media (max-width: 900px), (pointer: coarse) {
+      :root {
+        --mobile-controls-height: 46px;
+        --mobile-keyboard-boost: 1.58;
+      }
+      #controls select,
+      #controls button { min-height: 31px; padding: 4px 7px !important; font-size: 10px !important; }
+    }
+  }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <!-- Filtro SVG Otimizado para Sangramento de Tinta Realista -->
+
+  <svg class="svg-filters">
+
+    <filter id="ink-bleed">
+
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" />
+
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+
+      <feGaussianBlur in="displaced" stdDeviation="0.4" result="blurred" />
+
+      <feMerge><feMergeNode in="blurred" /><feMergeNode in="SourceGraphic" /></feMerge>
+
+    </filter>
+
+  </svg>
+
+
+
+  <div id="controls">
+
+    <select id="paperSize">
+
+      <option value="size-a4">Tam: A4</option>
+
+      <option value="size-letter">Tam: Carta</option>
+
+      <option value="size-note">Tam: Cartão</option>
+
+    </select>
+
+    <select id="paperTexture">
+
+      <option value="texture-standard">Papel Padrão</option>
+
+      <option value="texture-aged">Envelhecido</option>
+
+      <option value="texture-recycled">Reciclado</option>
+
+      <option value="texture-parchment">Pergaminho</option>
+
+    </select>
+
+    <select id="fontFamily">
+
+      <option value="'Special Elite'">Fonte Clássica</option>
+
+      <option value="'Courier Prime'">Datilografia</option>
+
+      <option value="'Lora'">Serifa Fina</option>
+
+      <option value="'Playfair Display'">Playfair</option>
+
+    </select>
+
+    <button onclick="stashCurrentPaperAndCreateNew()">➕ Inserir Folha</button>
+
+    <button class="pencil" id="btn-pencil" onclick="toggleTool('pencil')">✏️ Lápis</button>
+
+    <button class="hand" id="btn-hand" onclick="toggleTool('hand')" title="Ative e puxe a folha para cima">✋ Puxar folha</button>
+
+    <button class="danger" id="btn-tear" onclick="manualTearPaper()" title="Rasga e remove a folha atual, inserindo uma nova folha em branco">🗑️ Rasgar / remover folha</button>
+
+    <button class="action" onclick="exportDoc()">💾 Exportar .DOC</button>
+
+  </div>
+
+
+
+  <div id="workspace">
+
+    <div id="desk-pad"></div>
+
+    <div id="coffee-stain"></div>
+
+    <div id="coffee-mug"></div>
+
+    <div id="scattered-pencil"></div>
+
+
+
+    <div id="desk-stack" title="Folhas na mesa. Arraste para a lixeira ou clique para editar."></div>
+
+    <div id="trash-can"></div>
+
+
+
+    <div id="typewriter-stage">
+
+      <div id="machine-base"></div>
+      <div id="machine-feet"></div>
+      <div id="machine-deck"></div>
+      <div id="machine-front-panel"></div>
+
+      <div id="machine-guts"></div>
+
+
+
+      <div id="format-levers">
+
+        <button id="btn-bold" class="lever" onclick="toggleFormat('bold')" title="Negrito">B</button>
+
+        <button id="btn-italic" class="lever" style="font-style: italic;" onclick="toggleFormat('italic')" title="Itálico">I</button>
+
+        <button id="btn-underline" class="lever" style="text-decoration: underline;" onclick="toggleFormat('underline')" title="Sublinhado">U</button>
+
+      </div>
+
+
+
+      <div id="roller-assembly">
+
+        <div class="roller-knob" id="knob-left"></div>
+
+        <div id="roller-cylinder"></div>
+
+        <div class="roller-knob" id="knob-right"></div>
+
+      </div>
+
+
+
+      <div id="paper-bail">
+
+        <div class="bail-roller"></div><div class="bail-roller"></div><div class="bail-roller"></div><div class="bail-roller"></div>
+
+      </div>
+
+
+
+      <div id="ribbon-guide"></div>
+      <div id="print-line-mask"></div>
+
+      <div id="paper-window">
+        <div id="carriage"></div>
+      </div>
+
+      <div id="machine-cowl"></div>
+
+      <!-- Teclado físico da própria máquina. São botões reais para funcionar no toque sem abrir o teclado do celular. -->
+      <div id="keyboard-container" aria-label="Teclado da máquina de escrever">
+        <div id="keyboard">
+          <div class="key-row">
+            <button type="button" class="key" data-key="q">Q</button><button type="button" class="key" data-key="w">W</button><button type="button" class="key" data-key="e">E</button><button type="button" class="key" data-key="r">R</button><button type="button" class="key" data-key="t">T</button><button type="button" class="key" data-key="y">Y</button><button type="button" class="key" data-key="u">U</button><button type="button" class="key" data-key="i">I</button><button type="button" class="key" data-key="o">O</button><button type="button" class="key" data-key="p">P</button>
+          </div>
+          <div class="key-row">
+            <button type="button" class="key" data-key="a">A</button><button type="button" class="key" data-key="s">S</button><button type="button" class="key" data-key="d">D</button><button type="button" class="key" data-key="f">F</button><button type="button" class="key" data-key="g">G</button><button type="button" class="key" data-key="h">H</button><button type="button" class="key" data-key="j">J</button><button type="button" class="key" data-key="k">K</button><button type="button" class="key" data-key="l">L</button><button type="button" class="key wide" data-key="enter">ENTER</button>
+          </div>
+          <div class="key-row">
+            <button type="button" class="key wide utility" data-action="shift" aria-pressed="false">SHIFT</button><button type="button" class="key" data-key="z">Z</button><button type="button" class="key" data-key="x">X</button><button type="button" class="key" data-key="c">C</button><button type="button" class="key" data-key="v">V</button><button type="button" class="key" data-key="b">B</button><button type="button" class="key" data-key="n">N</button><button type="button" class="key" data-key="m">M</button><button type="button" class="key" data-key="ç">Ç</button><button type="button" class="key wide" data-key="backspace">VOLTAR</button>
+          </div>
+          <div class="key-row key-row-bottom">
+            <button type="button" class="key symbol" data-action="accent" data-accent="´">´</button><button type="button" class="key symbol" data-action="accent" data-accent="~">~</button><button type="button" class="key symbol" data-action="accent" data-accent="^">^</button><button type="button" class="key spacebar" data-key=" " aria-label="Espaço"></button><button type="button" class="key symbol" data-key=",">,</button><button type="button" class="key symbol" data-key=".">.</button><button type="button" class="key symbol" data-key="?">?</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+<script>
+
+  const PAPER_MARGIN_X = 50; const PAPER_MARGIN_Y = 60;
+
+  const CHAR_WIDTH = 12.5; const LINE_HEIGHT = 24;
+
+  let audioStarted = false;
+
+  // LocalStorage pode ser bloqueado em alguns modos/visualizadores.
+  // Estas funções mantêm a máquina funcionando mesmo sem persistência.
+  function storageGet(key) {
+    try { return window.localStorage.getItem(key); } catch (_) { return null; }
+  }
+  function storageSet(key, value) {
+    try { window.localStorage.setItem(key, value); } catch (_) {}
+  }
+
+  const carriage = document.getElementById('carriage');
+
+  const deskStack = document.getElementById('desk-stack');
+
+  const trashCan = document.getElementById('trash-can');
+
+  const knobL = document.getElementById('knob-left');
+
+  const knobR = document.getElementById('knob-right');
+
+
+
+  let activePaper = null; let col = 0; let row = 0;
+
+  let textGrid = {};
+
+
+
+  // Estado das Ferramentas
+
+  let formatFlags = { bold: false, italic: false, underline: false };
+
+  let currentTool = 'typing'; // 'typing', 'pencil', 'hand'
+
+
+
+  // ============================================================
+  // ÁUDIO REAL DE TECLA DE MÁQUINA DE ESCREVER
+  // ============================================================
+  // A digitação NÃO é mais sintetizada. Cada caractere reproduz
+  // uma gravação real de uma tecla mecânica de máquina de escrever.
+  // Fonte: BMacZero / OpenGameArt — CC0 (domínio público).
+  // https://opengameart.org/content/mechanical-sounds
+  //
+  // Um pequeno pool permite sobrepor vários "clacks" durante
+  // digitação rápida sem cortar a tecla anterior.
+
+  // ============================================================
+  // ÁUDIO — sem Tone.js e sem dependência de biblioteca externa.
+  // A tecla usa uma gravação real. Se o áudio externo falhar, toda a
+  // digitação continua funcionando normalmente.
+  // ============================================================
+  const TYPEWRITER_KEY_URL = 'https://opengameart.org/sites/default/files/typewriter1.wav';
+  const TYPEWRITER_KEY_POOL_SIZE = 10;
+  const typewriterKeyPool = Array.from({ length: TYPEWRITER_KEY_POOL_SIZE }, () => {
+    const a = new Audio();
+    a.preload = 'auto';
+    a.src = TYPEWRITER_KEY_URL;
+    return a;
+  });
+  let typewriterKeyPoolIndex = 0;
+  let audioContext = null;
+
+  function initAudio() {
+    audioStarted = true;
+    if (!audioContext) {
+      try {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (Ctx) audioContext = new Ctx();
+      } catch (_) {}
+    }
+    if (audioContext && audioContext.state === 'suspended') {
+      audioContext.resume().catch(() => {});
+    }
+  }
+
+  function playRealTypewriterKey(volume = .50, minRate = .97, maxRate = 1.03) {
+    if (!audioStarted) return;
+    const a = typewriterKeyPool[typewriterKeyPoolIndex];
+    typewriterKeyPoolIndex = (typewriterKeyPoolIndex + 1) % typewriterKeyPool.length;
+    try {
+      a.pause();
+      a.currentTime = 0;
+      a.volume = Math.max(0, Math.min(1, volume * (.96 + Math.random() * .08)));
+      a.playbackRate = minRate + Math.random() * (maxRate - minRate);
+      const promise = a.play();
+      if (promise && promise.catch) promise.catch(() => {});
+    } catch (_) {}
+  }
+
+  function tinyBell() {
+    if (!audioContext) return;
+    try {
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1480, audioContext.currentTime);
+      gain.gain.setValueAtTime(.0001, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(.10, audioContext.currentTime + .004);
+      gain.gain.exponentialRampToValueAtTime(.0001, audioContext.currentTime + .28);
+      osc.connect(gain).connect(audioContext.destination);
+      osc.start();
+      osc.stop(audioContext.currentTime + .30);
+    } catch (_) {}
+  }
+
+  function softMechanicalNoise(duration = .10, amount = .05) {
+    if (!audioContext) return;
+    try {
+      const count = Math.max(1, Math.floor(audioContext.sampleRate * duration));
+      const buffer = audioContext.createBuffer(1, count, audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < count; i++) {
+        const envelope = 1 - (i / count);
+        data[i] = (Math.random() * 2 - 1) * envelope * amount;
+      }
+      const src = audioContext.createBufferSource();
+      const gain = audioContext.createGain();
+      gain.gain.value = .6;
+      src.buffer = buffer;
+      src.connect(gain).connect(audioContext.destination);
+      src.start();
+    } catch (_) {}
+  }
+
+  function play(s) {
+    if (!audioStarted) return;
+    if (s === 'clack') {
+      playRealTypewriterKey(.50, .97, 1.03);
+    } else if (s === 'space') {
+      playRealTypewriterKey(.25, .82, .90);
+    } else if (s === 'ding') {
+      tinyBell();
+    } else if (s === 'return') {
+      [0, 38, 76, 114, 152].forEach((ms, i) => setTimeout(() => playRealTypewriterKey(.22 - i*.025, .88, .96), ms));
+      setTimeout(() => softMechanicalNoise(.08, .05), 180);
+    } else if (s === 'paper') {
+      softMechanicalNoise(.12, .035);
+    } else if (s === 'rip') {
+      softMechanicalNoise(.25, .08);
+    }
+  }
+
+  // Drag Lixeira
+
+  trashCan.addEventListener('dragover', e => { e.preventDefault(); trashCan.classList.add('drag-over'); });
+
+  trashCan.addEventListener('dragleave', () => trashCan.classList.remove('drag-over'));
+
+  trashCan.addEventListener('drop', e => {
+
+    e.preventDefault(); trashCan.classList.remove('drag-over');
+
+    const id = e.dataTransfer.getData('text/plain');
+
+    const el = document.getElementById(id);
+
+    if(el) { play('rip'); el.remove(); }
+
+  });
+
+
+
+  function toggleFormat(type) {
+
+    initAudio(); play('clack');
+
+    formatFlags[type] = !formatFlags[type];
+
+    document.getElementById(`btn-${type}`).classList.toggle('active');
+
+  }
+
+
+
+  // Alternância de Ferramentas (Lápis, Mão, Digitação)
+
+  function refreshToolUI() {
+    document.getElementById('btn-pencil').classList.toggle('active', currentTool === 'pencil');
+    document.getElementById('btn-hand').classList.toggle('active', currentTool === 'hand');
+
+    if (activePaper) {
+      if (currentTool === 'pencil') {
+        activePaper.style.cursor = 'crosshair';
+      } else if (currentTool === 'hand') {
+        activePaper.style.cursor = 'grab';
+      } else {
+        activePaper.style.cursor = 'default';
+      }
+    }
+  }
+
+  function toggleTool(tool) {
+    initAudio();
+    if (currentTool === tool) currentTool = 'typing';
+    else currentTool = tool;
+    refreshToolUI();
+  }
+
+
+
+  // Interações do papel — mouse, toque e caneta com Pointer Events.
+  let isDrawing = false; let currentPath = null;
+  let isDraggingPaper = false; let dragStartY = 0;
+  let paperPointerId = null;
+
+  function paperLocalPoint(p, e) {
+    const rect = p.getBoundingClientRect();
+    const sx = rect.width ? (p.offsetWidth / rect.width) : 1;
+    const sy = rect.height ? (p.offsetHeight / rect.height) : 1;
+    return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
+  }
+
+  function attachPaperEvents(p) {
+    p.addEventListener('pointerdown', (e) => {
+      if (currentTool !== 'pencil' && currentTool !== 'hand') return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault();
+      paperPointerId = e.pointerId;
+      try { p.setPointerCapture(e.pointerId); } catch (_) {}
+
+      if (currentTool === 'pencil') {
+        isDrawing = true;
+        const pt = paperLocalPoint(p, e);
+        currentPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        currentPath.setAttribute('stroke', '#333b47');
+        currentPath.setAttribute('stroke-width', '2.5');
+        currentPath.setAttribute('stroke-linecap', 'round');
+        currentPath.setAttribute('stroke-linejoin', 'round');
+        currentPath.setAttribute('fill', 'none');
+        currentPath.setAttribute('d', `M ${pt.x} ${pt.y}`);
+        let svg = p.querySelector('.drawing-layer');
+        if (!svg) {
+          svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          svg.classList.add('drawing-layer');
+          svg.setAttribute('viewBox', `0 0 ${p.offsetWidth} ${p.offsetHeight}`);
+          svg.setAttribute('preserveAspectRatio', 'none');
+          svg.setAttribute('style', 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:visible;');
+          p.appendChild(svg);
+        }
+        svg.appendChild(currentPath);
+      } else {
+        isDraggingPaper = true;
+        dragStartY = e.clientY;
+        p.style.cursor = 'grabbing';
+      }
+    }, { passive: false });
+
+    p.addEventListener('pointermove', (e) => {
+      if (paperPointerId !== e.pointerId) return;
+      if (currentTool === 'pencil' && isDrawing && currentPath) {
+        e.preventDefault();
+        const pt = paperLocalPoint(p, e);
+        currentPath.setAttribute('d', `${currentPath.getAttribute('d')} L ${pt.x} ${pt.y}`);
+      } else if (currentTool === 'hand' && isDraggingPaper) {
+        e.preventDefault();
+        const dy = e.clientY - dragStartY;
+        if (dy < -95) {
+          isDraggingPaper = false;
+          paperPointerId = null;
+          manualTearPaper();
+        } else if (dy < 0) {
+          const rect = p.getBoundingClientRect();
+          const scaleY = rect.height ? p.offsetHeight / rect.height : 1;
+          const localDy = dy * scaleY;
+          p.style.transform = `translateY(${localDy}px) rotate(${localDy/55}deg)`;
+        }
+      }
+    }, { passive: false });
+
+    const finishPointer = (e) => {
+      if (paperPointerId !== null && e.pointerId !== undefined && e.pointerId !== paperPointerId) return;
+      if (isDrawing) updateSaveData();
+      isDrawing = false;
+      currentPath = null;
+      isDraggingPaper = false;
+      paperPointerId = null;
+      if (activePaper) {
+        activePaper.style.transform = 'none';
+        refreshToolUI();
+      }
+    };
+    p.addEventListener('pointerup', finishPointer);
+    p.addEventListener('pointercancel', finishPointer);
+  }
+
+  function createNewPaper(sizeClass, textureClass) {
+
+    const p = document.createElement('div');
+
+    p.id = 'paper_' + Date.now();
+
+    p.className = `paper ${sizeClass} ${textureClass}`;
+
+    p.dataset.col = 0; p.dataset.row = 0;
+
+    p.dataset.font = document.getElementById('fontFamily').value;
+
+    p.textGridData = {};
+
+    attachPaperEvents(p);
+
+    return p;
+
+  }
+
+
+
+  function loadPaperToMachine(paperElem) {
+
+    initAudio(); play('paper');
+
+
+
+    if (activePaper) {
+
+      activePaper.dataset.col = col; activePaper.dataset.row = row;
+
+      activePaper.textGridData = JSON.parse(JSON.stringify(textGrid)); 
+
+      activePaper.classList.add('stacked');
+
+      activePaper.draggable = true;
+
+      activePaper.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', e.target.id));
+
+      activePaper.style.transform = `scale(0.35) rotate(${Math.random() * 10 - 5}deg)`;
+
+      deskStack.appendChild(activePaper);
+
+      activePaper.onclick = function() { if (this.parentNode === deskStack) stashCurrentPaperAndLoad(this); };
+
+    }
+
+
+
+    activePaper = paperElem;
+
+    activePaper.classList.remove('stacked', 'tearing-manual');
+
+    activePaper.style.transform = 'none';
+
+    activePaper.draggable = false;
+
+    activePaper.onclick = null;
+
+    carriage.appendChild(activePaper);
+    refreshToolUI();
+
+
+
+    col = parseInt(activePaper.dataset.col || 0); row = parseInt(activePaper.dataset.row || 0);
+
+    textGrid = activePaper.textGridData || {};
+
+    document.body.style.fontFamily = activePaper.dataset.font || "'Special Elite', monospace";
+
+    updateCarriage();
+
+  }
+
+
+
+  function stashCurrentPaperAndCreateNew() {
+
+    loadPaperToMachine(createNewPaper(document.getElementById('paperSize').value, document.getElementById('paperTexture').value));
+
+  }
+
+  function stashCurrentPaperAndLoad(savedPaper) { loadPaperToMachine(savedPaper); }
+
+
+
+  function updateSaveData() {
+
+    if(!activePaper) return;
+
+    storageSet('typewriter_html', activePaper.innerHTML);
+
+    storageSet('typewriter_col', col);
+
+    storageSet('typewriter_row', row);
+
+    storageSet('typewriter_grid', JSON.stringify(textGrid));
+
+  }
+
+
+
+  function updateCarriage() {
+
+    if (!activePaper) return;
+
+    const x = -(PAPER_MARGIN_X + (col * CHAR_WIDTH));
+
+    const y = -(PAPER_MARGIN_Y + (row * LINE_HEIGHT));
+
+    carriage.style.transform = `translate(${x}px, ${y}px)`;
+
+
+
+    // Rotação visual dos botões laterais (Knobs)
+
+    const rot = row * 25; // 25 graus por linha
+
+    knobL.style.transform = `rotateX(${rot}deg)`;
+
+    knobR.style.transform = `rotateX(${rot}deg)`;
+
+
+
+    updateSaveData();
+
+  }
+
+
+
+  function highlightKey(keyStr) {
+    const wanted = String(keyStr).toLowerCase();
+    const keyEl = [...document.querySelectorAll('.key')].find(el => (el.dataset.key || '').toLowerCase() === wanted);
+    if (keyEl) {
+      keyEl.classList.add('pressed');
+      setTimeout(() => keyEl.classList.remove('pressed'), 100);
+    }
+  }
+
+
+
+  let virtualShift = false;
+  let pendingAccent = null;
+
+  const accentMaps = {
+    '´': { a:'á', e:'é', i:'í', o:'ó', u:'ú', A:'Á', E:'É', I:'Í', O:'Ó', U:'Ú' },
+    '~': { a:'ã', o:'õ', A:'Ã', O:'Õ' },
+    '^': { a:'â', e:'ê', o:'ô', A:'Â', E:'Ê', O:'Ô' }
+  };
+
+  function syncKeyboardModes() {
+    document.querySelectorAll('.key[data-action="shift"]').forEach(btn => {
+      btn.classList.toggle('active', virtualShift);
+      btn.setAttribute('aria-pressed', virtualShift ? 'true' : 'false');
+    });
+    document.querySelectorAll('.key[data-action="accent"]').forEach(btn => {
+      btn.classList.toggle('active', !!pendingAccent && btn.dataset.accent === pendingAccent);
+    });
+  }
+
+  function typeCharacter(char) {
+    if (!activePaper || typeof char !== 'string' || char.length === 0) return;
+    initAudio();
+
+    if (char !== ' ') {
+      const span = document.createElement('span');
+      span.textContent = char;
+      span.className = 'char';
+      span.style.fontFamily = activePaper.dataset.font;
+      span.style.left = `${PAPER_MARGIN_X + (col * CHAR_WIDTH)}px`;
+      span.style.top = `${PAPER_MARGIN_Y + (row * LINE_HEIGHT)}px`;
+      if (formatFlags.bold) span.classList.add('bold');
+      if (formatFlags.italic) span.classList.add('italic');
+      if (formatFlags.underline) span.classList.add('underline');
+      const rot = (Math.random() - 0.5) * 4;
+      const offX = (Math.random() - 0.5) * 1.5;
+      const offY = (Math.random() - 0.5) * 1.5;
+      span.style.transform = `translate(${offX}px, ${offY}px) rotate(${rot}deg)`;
+      span.style.opacity = 0.75 + Math.random() * 0.25;
+      activePaper.appendChild(span);
+      play('clack');
+      if (!textGrid[row]) textGrid[row] = {};
+      textGrid[row][col] = { char, b: formatFlags.bold, i: formatFlags.italic, u: formatFlags.underline };
+    } else {
+      play('space');
+      if (!textGrid[row]) textGrid[row] = {};
+      textGrid[row][col] = { char: ' ', b: false, i: false, u: false };
+    }
+
+    col++;
+    const maxCols = Math.floor((activePaper.offsetWidth - (PAPER_MARGIN_X * 2)) / CHAR_WIDTH);
+    if (col === maxCols - 6) play('ding');
+    if (col > maxCols) { row++; col = 0; play('return'); }
+    updateCarriage();
+  }
+
+  function processTypewriterKey(key, visualEl = null, useVirtualModes = false) {
+    if (currentTool !== 'typing' || !activePaper) return;
+    initAudio();
+
+    if (visualEl) {
+      visualEl.classList.add('pressed');
+      setTimeout(() => visualEl.classList.remove('pressed'), 85);
+    }
+
+    if (key === 'ArrowUp') { if (row > 0) { row--; play('space'); updateCarriage(); } return; }
+    if (key === 'ArrowDown') { row++; play('space'); updateCarriage(); return; }
+    if (key === 'ArrowLeft' || key === 'Backspace') {
+      if (key === 'Backspace' && !visualEl) highlightKey('backspace');
+      if (col > 0) { col--; play('space'); updateCarriage(); }
+      return;
+    }
+    if (key === 'ArrowRight') { col++; play('space'); updateCarriage(); return; }
+    if (key === 'Enter') {
+      if (!visualEl) highlightKey('enter');
+      row++; col = 0;
+      play('return');
+      updateCarriage();
+      return;
+    }
+
+    if (typeof key === 'string' && key.length === 1) {
+      let char = key;
+      if (useVirtualModes) {
+        if (virtualShift && /[a-zç]/i.test(char)) char = char.toUpperCase();
+        if (pendingAccent) {
+          const mapped = accentMaps[pendingAccent] && accentMaps[pendingAccent][char];
+          if (mapped) char = mapped;
+          else typeCharacter(pendingAccent);
+          pendingAccent = null;
+          syncKeyboardModes();
+        }
+      }
+      if (!visualEl) highlightKey(char);
+      typeCharacter(char);
+    }
+  }
+
+  // Teclado físico externo (desktop/notebook/Bluetooth).
+  window.addEventListener('keydown', (e) => {
+    if (currentTool !== 'typing' || !activePaper) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const handled = ['Space','Backspace','Enter','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code) || e.key.length === 1;
+    if (!handled) return;
+    e.preventDefault();
+    processTypewriterKey(e.key, null, false);
+  });
+
+  // Teclas da própria máquina. Pointerdown responde imediatamente no celular
+  // e, por serem <button>, não invocam teclado virtual de iOS/Android.
+  document.querySelectorAll('#keyboard-container .key').forEach(keyEl => {
+    keyEl.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault();
+      if (currentTool !== 'typing') return;
+
+      if (keyEl.dataset.action === 'shift') {
+        initAudio();
+        virtualShift = !virtualShift;
+        pendingAccent = null;
+        syncKeyboardModes();
+        play('space');
+        keyEl.classList.add('pressed');
+        setTimeout(() => keyEl.classList.remove('pressed'), 85);
+        return;
+      }
+
+      if (keyEl.dataset.action === 'accent') {
+        initAudio();
+        const accent = keyEl.dataset.accent || '';
+        pendingAccent = pendingAccent === accent ? null : accent;
+        syncKeyboardModes();
+        play('space');
+        keyEl.classList.add('pressed');
+        setTimeout(() => keyEl.classList.remove('pressed'), 85);
+        return;
+      }
+
+      const raw = keyEl.dataset.key || '';
+      const key = raw === 'enter' ? 'Enter' : raw === 'backspace' ? 'Backspace' : raw;
+      processTypewriterKey(key, keyEl, true);
+    }, { passive: false });
+
+    keyEl.addEventListener('contextmenu', (e) => e.preventDefault());
+  });
+
+  syncKeyboardModes();
+
+  document.getElementById('fontFamily').addEventListener('change', (e) => {
+
+    if(activePaper) activePaper.dataset.font = e.target.value;
+
+  });
+
+
+
+  function manualTearPaper() {
+    if (!activePaper) return;
+
+    initAudio();
+    play('rip');
+
+    const old = activePaper;
+    old.style.cursor = 'default';
+    old.style.zIndex = '90';
+    old.classList.add('tearing-manual');
+
+    activePaper = null;
+    isDraggingPaper = false;
+    isDrawing = false;
+    currentPath = null;
+    currentTool = 'typing';
+    refreshToolUI();
+
+    setTimeout(() => {
+      old.remove();
+      col = 0;
+      row = 0;
+      textGrid = {};
+      stashCurrentPaperAndCreateNew();
+    }, 520);
+  }
+
+
+
+  // Exportar Word c/ Formatação Nativa
+
+  function exportDoc() {
+
+    if (Object.keys(textGrid).length === 0) return alert("Folha vazia!");
+
+    let content = `<html xmlns:w='urn:schemas-microsoft-com:office:word'><head><meta charset='utf-8'></head><body style="font-family: monospace; font-size: 14pt;">`;
+
+    let maxRow = Math.max(...Object.keys(textGrid).map(Number));
+
+
+
+    for (let r = 0; r <= maxRow; r++) {
+
+      let p = '<p style="margin: 0; line-height: 1.5;">';
+
+      if (textGrid[r]) {
+
+        let maxC = Math.max(...Object.keys(textGrid[r]).map(Number));
+
+        for (let c = 0; c <= maxC; c++) {
+
+          let data = textGrid[r][c];
+
+          if (!data) { p += '&nbsp;'; continue; }
+
+          let cHtml = (data.char === ' ' || !data.char) ? '&nbsp;' : data.char;
+
+          if (data.b) cHtml = `<b>${cHtml}</b>`;
+
+          if (data.i) cHtml = `<i>${cHtml}</i>`;
+
+          if (data.u) cHtml = `<u>${cHtml}</u>`;
+
+          p += cHtml;
+
+        }
+
+      }
+
+      p += '</p>'; content += p;
+
+    }
+
+    content += '</body></html>';
+
+    const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a'); a.href = url; a.download = 'Manuscrito.doc'; a.click();
+
+    URL.revokeObjectURL(url);
+
+  }
+
+
+
+
+  // ============================================================
+  // Escala móvel: calcula uma única transformação para a máquina inteira.
+  // Não move elementos entre containers e não duplica teclado.
+  // ============================================================
+  let mobileLayoutRaf = 0;
+
+  function mobileModeActive() {
+    return window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
+  }
+
+  function applyResponsiveLayout() {
+    if (!mobileModeActive()) {
+      document.documentElement.style.removeProperty('--mobile-stage-scale');
+      document.documentElement.style.removeProperty('--mobile-stage-top');
+      return;
+    }
+
+    const vv = window.visualViewport;
+    const vw = Math.max(240, vv ? vv.width : window.innerWidth);
+    const vh = Math.max(320, vv ? vv.height : window.innerHeight);
+    const css = getComputedStyle(document.documentElement);
+    const controlsH = parseFloat(css.getPropertyValue('--mobile-controls-height')) || 54;
+    const safeTop = 0;
+    const safeBottom = 0;
+    const horizontalGap = 6;
+    const verticalGap = 8;
+    const availableH = Math.max(160, vh - controlsH - verticalGap - safeTop - safeBottom);
+    const byWidth = (vw - horizontalGap * 2) / 900;
+    const byHeight = availableH / 680;
+    const scale = Math.max(.24, Math.min(1, byWidth, byHeight));
+    const renderedH = 680 * scale;
+    const top = controlsH + verticalGap + Math.max(0, (availableH - renderedH) / 2);
+
+    document.documentElement.style.setProperty('--mobile-stage-scale', scale.toFixed(4));
+    document.documentElement.style.setProperty('--mobile-stage-top', `${Math.round(top)}px`);
+  }
+
+  function scheduleResponsiveLayout() {
+    cancelAnimationFrame(mobileLayoutRaf);
+    mobileLayoutRaf = requestAnimationFrame(applyResponsiveLayout);
+  }
+
+  window.addEventListener('resize', scheduleResponsiveLayout, { passive: true });
+  window.addEventListener('orientationchange', () => setTimeout(applyResponsiveLayout, 100), { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', scheduleResponsiveLayout, { passive: true });
+  }
+
+  // Restaura da nuvem local
+
+  function initializeTypewriter() {
+    applyResponsiveLayout();
+
+    const savedHtml = storageGet('typewriter_html');
+    if (savedHtml) {
+      const p = createNewPaper('size-a4', 'texture-standard');
+      p.innerHTML = savedHtml;
+      try { textGrid = JSON.parse(storageGet('typewriter_grid') || '{}'); }
+      catch (_) { textGrid = {}; }
+      p.textGridData = textGrid;
+      p.dataset.col = storageGet('typewriter_col') || 0;
+      p.dataset.row = storageGet('typewriter_row') || 0;
+      loadPaperToMachine(p);
+    } else {
+      stashCurrentPaperAndCreateNew();
+    }
+
+    setTimeout(applyResponsiveLayout, 60);
+    setTimeout(applyResponsiveLayout, 250);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTypewriter, { once: true });
+  } else {
+    initializeTypewriter();
+  }
+
+</script>
+
+</body>
+
+</html>
