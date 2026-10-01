@@ -452,6 +452,9 @@
 
   .char.underline { text-decoration: underline; text-decoration-thickness: 1.5px; text-decoration-color: var(--ink-color); text-underline-offset: 3px; }
 
+  /* Rebatida sobre uma célula já ocupada: tinta física acumulada, sem apagar. */
+  .char.overprint { mix-blend-mode: multiply; }
+
 
 
   /* Texturas Orgânicas do Papel */
@@ -1304,6 +1307,252 @@
     }
   }
 
+
+
+  /* =========================================================
+     AJUSTES SOLICITADOS — sem alterar a identidade existente
+     ========================================================= */
+
+  /* Papel em escala de projeto coerente com medidas físicas reais.
+     Escala usada: 72 unidades por polegada (1 mm = 2,834645669 px).
+     A4 = 210 x 297 mm -> 595,276 x 841,890 px (proporção ISO exata). */
+  .size-a4 { width: 595.276px; min-height: 841.890px; height: 841.890px; }
+  .size-letter { width: 612px; min-height: 792px; height: 792px; }
+  .size-note { width: 297.638px; min-height: 419.528px; height: 419.528px; }
+
+  /* O papel continua escondido ABAIXO do rolo, mas deixa de ser recortado
+     acima dele. Assim, tudo o que já saiu da máquina permanece visível. */
+  #paper-window {
+    overflow: visible !important;
+    contain: none !important;
+    clip-path: inset(-1400px 0 0 0) !important;
+  }
+
+  .continuation-toggle.active {
+    background: linear-gradient(to bottom, #e7d58c, #b59637) !important;
+    color: #17130b !important;
+    box-shadow: 0 3px 0 #6e571f, inset 0 1px 1px rgba(255,255,255,.7) !important;
+  }
+
+  .continuation-marker {
+    pointer-events: auto !important;
+    cursor: pointer;
+    z-index: 20;
+    opacity: .92 !important;
+    font-weight: bold;
+    text-decoration: none !important;
+  }
+
+
+  /* Cursor visual de datilografia: indica exatamente onde a próxima tecla será impressa. */
+  .typing-caret {
+    position: absolute;
+    width: 13px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    color: #8b1818;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'Courier Prime', monospace;
+    pointer-events: none;
+    user-select: none;
+    z-index: 90;
+    opacity: .95;
+    text-shadow: 0 1px 0 rgba(255,255,255,.28), 0 0 2px rgba(120,0,0,.22);
+    animation: typewriter-caret-blink .92s steps(1, end) infinite;
+  }
+
+  @keyframes typewriter-caret-blink {
+    0%, 46% { opacity: .95; }
+    47%, 100% { opacity: .18; }
+  }
+
+  @media (max-width: 1024px), (pointer: coarse), (hover: none) {
+    .typing-caret {
+      color: #a61919;
+      font-weight: 800;
+      text-shadow: 0 0 2px rgba(255,255,255,.45), 0 0 3px rgba(120,0,0,.28);
+    }
+  }
+
+  #mobile-paper-dock,
+  #mobile-paper-panel {
+    display: none;
+  }
+
+  @media (max-width: 1024px), (pointer: coarse), (hover: none) {
+    :root { --mobile-keyboard-boost: 1.72; }
+
+    #mobile-paper-dock {
+      position: fixed;
+      z-index: 5500;
+      right: max(7px, var(--safe-right));
+      top: calc(var(--safe-top) + var(--mobile-controls-height) + 8px);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      pointer-events: auto;
+    }
+
+    .mobile-dock-btn {
+      position: relative;
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      min-height: 42px;
+      padding: 0 !important;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.15);
+      display: grid;
+      place-items: center;
+      font-size: 20px !important;
+      line-height: 1;
+      background: linear-gradient(to bottom, rgba(45,45,45,.96), rgba(12,12,12,.96));
+      color: #fff;
+      box-shadow: 0 5px 12px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.12);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      touch-action: manipulation;
+    }
+
+    .mobile-dock-btn:disabled { opacity: .45; }
+
+    .mobile-dock-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: #c7433e;
+      color: #fff;
+      font: bold 10px/18px 'Courier Prime', monospace;
+      box-shadow: 0 2px 5px rgba(0,0,0,.5);
+      box-sizing: border-box;
+    }
+
+    #mobile-paper-panel {
+      position: fixed;
+      z-index: 7000;
+      left: max(8px, var(--safe-left));
+      right: max(8px, var(--safe-right));
+      bottom: max(8px, var(--safe-bottom));
+      max-height: min(48dvh, 390px);
+      overflow: hidden;
+      box-sizing: border-box;
+      padding: 10px;
+      border: 1px solid #393939;
+      border-radius: 16px;
+      background: rgba(12,12,12,.96);
+      color: #eee;
+      box-shadow: 0 14px 35px rgba(0,0,0,.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    #mobile-paper-panel.open { display: block; }
+
+    .mobile-paper-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    #mobile-paper-panel-title { font: bold 14px/1.2 'Courier Prime', monospace; }
+
+    #mobile-paper-panel-close {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      padding: 0 !important;
+      border-radius: 50%;
+      font-size: 22px !important;
+      line-height: 1;
+    }
+
+    #mobile-paper-panel-help {
+      margin: 0 0 8px;
+      color: #bdbdbd;
+      font: 11px/1.35 'Courier Prime', monospace;
+    }
+
+    #mobile-paper-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      max-height: calc(min(48dvh, 390px) - 70px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-paper-item {
+      display: grid;
+      grid-template-columns: 44px minmax(0,1fr) 38px;
+      align-items: center;
+      gap: 9px;
+      min-height: 56px;
+      padding: 7px;
+      border: 1px solid #363636;
+      border-radius: 10px;
+      background: #1b1b1b;
+      color: #eee;
+      text-align: left;
+      box-sizing: border-box;
+    }
+
+    .mobile-paper-thumb {
+      width: 34px;
+      height: 45px;
+      margin: auto;
+      border: 1px solid rgba(0,0,0,.3);
+      border-radius: 2px;
+      background: #f4f0e6;
+      box-shadow: 0 2px 5px rgba(0,0,0,.45);
+    }
+
+    .mobile-paper-item-text { min-width: 0; }
+
+    .mobile-paper-item-name,
+    .mobile-paper-item-preview {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mobile-paper-item-name {
+      font: bold 12px/1.25 'Courier Prime', monospace;
+      color: #f0f0f0;
+    }
+
+    .mobile-paper-item-preview {
+      margin-top: 3px;
+      font: 10px/1.25 'Courier Prime', monospace;
+      color: #aaa;
+    }
+
+    .mobile-paper-delete {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      padding: 0 !important;
+      border-radius: 50%;
+      font-size: 15px !important;
+    }
+
+    .mobile-paper-empty {
+      padding: 18px 10px;
+      color: #aaa;
+      text-align: center;
+      font: 12px/1.4 'Courier Prime', monospace;
+    }
+  }
+
 </style>
 
 
@@ -1369,6 +1618,8 @@
 
     </select>
 
+    <button id="btn-continuation" class="continuation-toggle" onclick="toggleContinuationMode()" title="Quando uma palavra continuar na linha seguinte, marca a quebra com _">＿ Continuidade: OFF</button>
+
     <button onclick="stashCurrentPaperAndCreateNew()">➕ Inserir Folha</button>
 
     <button class="pencil" id="btn-pencil" onclick="toggleTool('pencil')">✏️ Lápis</button>
@@ -1378,6 +1629,8 @@
     <button class="danger" id="btn-tear" onclick="manualTearPaper()" title="Rasga e remove a folha atual, inserindo uma nova folha em branco">🗑️ Rasgar / remover folha</button>
 
     <button class="action" onclick="exportDoc()">💾 Exportar .DOC</button>
+    <button class="action" onclick="exportPDF()">📄 Exportar PDF</button>
+    <button class="action" onclick="exportPNG()">🖼️ Exportar PNG</button>
 
   </div>
 
@@ -1472,6 +1725,26 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Ferramentas móveis para as folhas guardadas e a lixeira.
+       No desktop, a pilha e a lixeira físicas continuam exatamente como antes. -->
+  <div id="mobile-paper-dock" aria-label="Folhas e lixeira">
+    <button type="button" id="mobile-sheets-btn" class="mobile-dock-btn" aria-label="Ver folhas guardadas" title="Folhas guardadas">
+      <span aria-hidden="true">📄</span><span id="mobile-sheets-count" class="mobile-dock-badge">0</span>
+    </button>
+    <button type="button" id="mobile-trash-btn" class="mobile-dock-btn" aria-label="Abrir lixeira" title="Lixeira">
+      <span aria-hidden="true">🗑️</span>
+    </button>
+  </div>
+
+  <div id="mobile-paper-panel" aria-hidden="true">
+    <div class="mobile-paper-panel-head">
+      <strong id="mobile-paper-panel-title">Folhas guardadas</strong>
+      <button type="button" id="mobile-paper-panel-close" aria-label="Fechar">×</button>
+    </div>
+    <div id="mobile-paper-panel-help"></div>
+    <div id="mobile-paper-list"></div>
   </div>
 
 
@@ -1640,7 +1913,7 @@
 
     const el = document.getElementById(id);
 
-    if(el) { play('rip'); el.remove(); }
+    if(el) { play('rip'); el.remove(); updateMobilePaperTools(); }
 
   });
 
@@ -1670,9 +1943,10 @@
       } else if (currentTool === 'hand') {
         activePaper.style.cursor = 'grab';
       } else {
-        activePaper.style.cursor = 'default';
+        activePaper.style.cursor = 'text';
       }
     }
+    updateTypingCaret();
   }
 
   function toggleTool(tool) {
@@ -1698,8 +1972,18 @@
 
   function attachPaperEvents(p) {
     p.addEventListener('pointerdown', (e) => {
-      if (currentTool !== 'pencil' && currentTool !== 'hand') return;
       if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+      // No modo de escrita, um toque/clique na folha move o cursor para
+      // aquela célula sem abrir o teclado virtual do celular.
+      if (currentTool === 'typing') {
+        if (e.target.closest && e.target.closest('.continuation-marker')) return;
+        e.preventDefault();
+        moveCursorToPaperPoint(p, e);
+        return;
+      }
+
+      if (currentTool !== 'pencil' && currentTool !== 'hand') return;
       e.preventDefault();
       paperPointerId = e.pointerId;
       try { p.setPointerCapture(e.pointerId); } catch (_) {}
@@ -1769,6 +2053,92 @@
     p.addEventListener('pointercancel', finishPointer);
   }
 
+
+  // ============================================================
+  // CURSOR VISUAL / POSICIONAMENTO PARA CORREÇÃO
+  // ============================================================
+  const typingCaret = document.createElement('span');
+  typingCaret.id = 'typing-caret';
+  typingCaret.className = 'typing-caret';
+  typingCaret.textContent = '_';
+  typingCaret.setAttribute('aria-hidden', 'true');
+  typingCaret.style.display = 'none';
+  carriage.appendChild(typingCaret);
+
+  function getPaperCursorBounds(paper = activePaper) {
+    if (!paper) return { maxCol: 0, maxRow: 0 };
+    const width = paper.offsetWidth || parseFloat(getComputedStyle(paper).width) || 595.276;
+    const height = paper.offsetHeight || parseFloat(getComputedStyle(paper).height) || 841.890;
+    return {
+      maxCol: Math.max(0, Math.floor((width - (PAPER_MARGIN_X * 2)) / CHAR_WIDTH)),
+      maxRow: Math.max(0, Math.floor((height - (PAPER_MARGIN_Y * 2)) / LINE_HEIGHT))
+    };
+  }
+
+  function clampCursorToPaper() {
+    const { maxCol, maxRow } = getPaperCursorBounds();
+    col = Math.max(0, Math.min(maxCol, Number.isFinite(col) ? col : 0));
+    row = Math.max(0, Math.min(maxRow, Number.isFinite(row) ? row : 0));
+  }
+
+  function updateTypingCaret() {
+    if (!activePaper || currentTool !== 'typing') {
+      typingCaret.style.display = 'none';
+      return;
+    }
+    clampCursorToPaper();
+    typingCaret.style.display = 'block';
+    typingCaret.style.left = `${PAPER_MARGIN_X + (col * CHAR_WIDTH)}px`;
+    typingCaret.style.top = `${PAPER_MARGIN_Y + (row * LINE_HEIGHT)}px`;
+    typingCaret.style.fontFamily = activePaper.dataset.font || "'Courier Prime', monospace";
+    // Mantém o cursor sempre acima da folha, sem fazer parte dela nem das exportações.
+    if (typingCaret.parentNode !== carriage) carriage.appendChild(typingCaret);
+  }
+
+  function indexExistingCharacterCells(paper) {
+    if (!paper) return;
+    paper.querySelectorAll('.char:not(.continuation-marker)').forEach(span => {
+      if (span.dataset.row !== undefined && span.dataset.col !== undefined) return;
+      const left = parseFloat(span.style.left || '0');
+      const top = parseFloat(span.style.top || '0');
+      const c = Math.round((left - PAPER_MARGIN_X) / CHAR_WIDTH);
+      const r = Math.round((top - PAPER_MARGIN_Y) / LINE_HEIGHT);
+      if (Number.isFinite(c) && Number.isFinite(r) && c >= 0 && r >= 0) {
+        span.dataset.col = String(c);
+        span.dataset.row = String(r);
+      }
+    });
+  }
+
+  function removeVisualCharacterAtCell(targetRow, targetCol) {
+    if (!activePaper) return;
+    const expectedLeft = PAPER_MARGIN_X + (targetCol * CHAR_WIDTH);
+    const expectedTop = PAPER_MARGIN_Y + (targetRow * LINE_HEIGHT);
+    activePaper.querySelectorAll('.char:not(.continuation-marker)').forEach(span => {
+      const rowByData = Number(span.dataset.row);
+      const colByData = Number(span.dataset.col);
+      const hasData = Number.isFinite(rowByData) && Number.isFinite(colByData);
+      const sameByData = hasData && rowByData === targetRow && colByData === targetCol;
+      const left = parseFloat(span.style.left || '0');
+      const top = parseFloat(span.style.top || '0');
+      const sameByPosition = !hasData && Math.abs(left - expectedLeft) < (CHAR_WIDTH * .45) && Math.abs(top - expectedTop) < (LINE_HEIGHT * .45);
+      if (sameByData || sameByPosition) span.remove();
+    });
+  }
+
+  function moveCursorToPaperPoint(paper, e) {
+    if (!paper || paper !== activePaper || currentTool !== 'typing') return;
+    const pt = paperLocalPoint(paper, e);
+    const { maxCol, maxRow } = getPaperCursorBounds(paper);
+    const nextCol = Math.round((pt.x - PAPER_MARGIN_X) / CHAR_WIDTH);
+    const nextRow = Math.round((pt.y - PAPER_MARGIN_Y) / LINE_HEIGHT);
+    col = Math.max(0, Math.min(maxCol, nextCol));
+    row = Math.max(0, Math.min(maxRow, nextRow));
+    pendingContinuationRow = null;
+    play('space');
+    updateCarriage();
+  }
+
   function createNewPaper(sizeClass, textureClass) {
 
     const p = document.createElement('div');
@@ -1830,7 +2200,7 @@
     activePaper.onclick = null;
 
     carriage.appendChild(activePaper);
-    refreshToolUI();
+    indexExistingCharacterCells(activePaper);
 
 
 
@@ -1840,7 +2210,9 @@
 
     document.body.style.fontFamily = activePaper.dataset.font || "'Special Elite', monospace";
 
+    refreshToolUI();
     updateCarriage();
+    updateMobilePaperTools();
 
   }
 
@@ -1872,15 +2244,40 @@
 
 
 
+  function getPaperEmergenceDesign() {
+    const carriageTop = 135;
+    const paperTop = carriageTop - PAPER_MARGIN_Y - (row * LINE_HEIGHT);
+    return Math.max(0, -paperTop);
+  }
+
+  function updatePaperExposureLayout() {
+    const emerged = getPaperEmergenceDesign();
+    const stage = document.getElementById('typewriter-stage');
+    if (!stage) return;
+
+    if (mobileModeActive()) {
+      scheduleResponsiveLayout();
+    } else {
+      const compactDesktop = window.innerHeight <= 760;
+      const baseMargin = compactDesktop ? 108 : 118;
+      const desktopScale = compactDesktop ? .93 : 1;
+      stage.style.marginTop = `${baseMargin + (emerged * desktopScale)}px`;
+    }
+  }
+
   function updateCarriage() {
 
     if (!activePaper) return;
 
-    const x = -(PAPER_MARGIN_X + (col * CHAR_WIDTH));
+    /* FIX DEFINITIVO: a folha nunca mais acompanha a coluna digitada.
+       Ela permanece centralizada horizontalmente no rolo; somente sobe
+       verticalmente a cada linha. Isso mantém todo o texto visível. */
+    const paperWidth = activePaper.offsetWidth || parseFloat(getComputedStyle(activePaper).width) || 595.276;
+    const x = -(paperWidth / 2);
 
     const y = -(PAPER_MARGIN_Y + (row * LINE_HEIGHT));
 
-    carriage.style.transform = `translate(${x}px, ${y}px)`;
+    carriage.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 
 
 
@@ -1892,7 +2289,8 @@
 
     knobR.style.transform = `rotateX(${rot}deg)`;
 
-
+    updatePaperExposureLayout();
+    updateTypingCaret();
 
     updateSaveData();
 
@@ -1910,6 +2308,56 @@
   }
 
 
+
+  let continuationMode = storageGet('typewriter_continuation_mode') === '1';
+  let pendingContinuationRow = null;
+
+  function isWordCharacter(char) {
+    return typeof char === 'string' && /^[0-9A-Za-zÀ-ÖØ-öø-ÿÇç]$/.test(char);
+  }
+
+  function syncContinuationButton() {
+    const btn = document.getElementById('btn-continuation');
+    if (!btn) return;
+    btn.classList.toggle('active', continuationMode);
+    btn.textContent = continuationMode ? '＿ Continuidade: ON' : '＿ Continuidade: OFF';
+    btn.setAttribute('aria-pressed', continuationMode ? 'true' : 'false');
+  }
+
+  function toggleContinuationMode() {
+    continuationMode = !continuationMode;
+    pendingContinuationRow = null;
+    storageSet('typewriter_continuation_mode', continuationMode ? '1' : '0');
+    syncContinuationButton();
+    initAudio();
+    play('space');
+  }
+
+  function addContinuationMarker(targetRow) {
+    if (!activePaper || !continuationMode || targetRow == null) return;
+    if (activePaper.querySelector(`.continuation-marker[data-row="${targetRow}"]`)) return;
+
+    const marker = document.createElement('span');
+    marker.className = 'char continuation-marker';
+    marker.dataset.row = String(targetRow);
+    marker.dataset.autoContinuation = '1';
+    marker.textContent = '_';
+    marker.title = 'Continuidade de palavra — toque para remover';
+    marker.style.fontFamily = activePaper.dataset.font;
+    marker.style.left = `${activePaper.offsetWidth - PAPER_MARGIN_X + 8}px`;
+    marker.style.top = `${PAPER_MARGIN_Y + (targetRow * LINE_HEIGHT) + 3}px`;
+    activePaper.appendChild(marker);
+    updateSaveData();
+  }
+
+  document.addEventListener('pointerdown', (e) => {
+    const marker = e.target.closest && e.target.closest('.continuation-marker');
+    if (!marker) return;
+    e.preventDefault();
+    e.stopPropagation();
+    marker.remove();
+    updateSaveData();
+  }, { passive: false });
 
   let virtualShift = false;
   let pendingAccent = null;
@@ -1934,35 +2382,78 @@
     if (!activePaper || typeof char !== 'string' || char.length === 0) return;
     initAudio();
 
+    if (pendingContinuationRow !== null) {
+      if (continuationMode && isWordCharacter(char)) addContinuationMarker(pendingContinuationRow);
+      pendingContinuationRow = null;
+    }
+
+    // Máquina de escrever real: reescrever numa posição ocupada NÃO apaga
+    // o caractere anterior. A nova impressão é adicionada fisicamente por cima.
+    const existingAtCell = [...activePaper.querySelectorAll('.char:not(.continuation-marker)')].filter(span => {
+      const r = Number(span.dataset.row);
+      const c = Number(span.dataset.col);
+      return Number.isFinite(r) && Number.isFinite(c) && r === row && c === col;
+    }).length;
+
     if (char !== ' ') {
       const span = document.createElement('span');
       span.textContent = char;
       span.className = 'char';
+      span.dataset.row = String(row);
+      span.dataset.col = String(col);
+      if (existingAtCell > 0) {
+        span.classList.add('overprint');
+        span.dataset.overprint = String(existingAtCell);
+      }
       span.style.fontFamily = activePaper.dataset.font;
       span.style.left = `${PAPER_MARGIN_X + (col * CHAR_WIDTH)}px`;
       span.style.top = `${PAPER_MARGIN_Y + (row * LINE_HEIGHT)}px`;
       if (formatFlags.bold) span.classList.add('bold');
       if (formatFlags.italic) span.classList.add('italic');
       if (formatFlags.underline) span.classList.add('underline');
-      const rot = (Math.random() - 0.5) * 4;
-      const offX = (Math.random() - 0.5) * 1.5;
-      const offY = (Math.random() - 0.5) * 1.5;
+      // Cada batida nunca cai exatamente no mesmo ponto na máquina real.
+      // Em reescrita, mantemos um pequeno desalinhamento para a sobreposição ficar visível.
+      const spread = existingAtCell > 0 ? 2.2 : 1.5;
+      const rotSpread = existingAtCell > 0 ? 5 : 4;
+      const rot = (Math.random() - 0.5) * rotSpread;
+      const offX = (Math.random() - 0.5) * spread;
+      const offY = (Math.random() - 0.5) * spread;
       span.style.transform = `translate(${offX}px, ${offY}px) rotate(${rot}deg)`;
-      span.style.opacity = 0.75 + Math.random() * 0.25;
+      span.style.opacity = existingAtCell > 0 ? (0.86 + Math.random() * 0.14) : (0.75 + Math.random() * 0.25);
       activePaper.appendChild(span);
       play('clack');
+
       if (!textGrid[row]) textGrid[row] = {};
-      textGrid[row][col] = { char, b: formatFlags.bold, i: formatFlags.italic, u: formatFlags.underline };
+      const strike = { char, b: formatFlags.bold, i: formatFlags.italic, u: formatFlags.underline };
+      const cell = textGrid[row][col];
+      if (!cell || cell.char === ' ') {
+        textGrid[row][col] = strike;
+      } else {
+        // Preserva a primeira batida e registra as seguintes como camadas,
+        // sem alterar/apagar aquilo que já estava no papel.
+        if (!Array.isArray(cell.overprints)) cell.overprints = [];
+        cell.overprints.push(strike);
+      }
     } else {
       play('space');
       if (!textGrid[row]) textGrid[row] = {};
-      textGrid[row][col] = { char: ' ', b: false, i: false, u: false };
+      // A barra de espaço apenas movimenta o carro. Se já existe tinta nesta
+      // posição, ela permanece intacta, como numa máquina de escrever real.
+      if (!textGrid[row][col]) {
+        textGrid[row][col] = { char: ' ', b: false, i: false, u: false };
+      }
     }
 
     col++;
     const maxCols = Math.floor((activePaper.offsetWidth - (PAPER_MARGIN_X * 2)) / CHAR_WIDTH);
     if (col === maxCols - 6) play('ding');
-    if (col > maxCols) { row++; col = 0; play('return'); }
+    if (col > maxCols) {
+      const wrappedRow = row;
+      pendingContinuationRow = continuationMode && isWordCharacter(char) ? wrappedRow : null;
+      row++;
+      col = 0;
+      play('return');
+    }
     updateCarriage();
   }
 
@@ -1975,17 +2466,30 @@
       setTimeout(() => visualEl.classList.remove('pressed'), 85);
     }
 
-    if (key === 'ArrowUp') { if (row > 0) { row--; play('space'); updateCarriage(); } return; }
-    if (key === 'ArrowDown') { row++; play('space'); updateCarriage(); return; }
+    if (key === 'ArrowUp') { pendingContinuationRow = null; if (row > 0) { row--; play('space'); updateCarriage(); } return; }
+    if (key === 'ArrowDown') {
+      pendingContinuationRow = null;
+      const { maxRow } = getPaperCursorBounds();
+      if (row < maxRow) { row++; play('space'); updateCarriage(); }
+      return;
+    }
     if (key === 'ArrowLeft' || key === 'Backspace') {
+      pendingContinuationRow = null;
       if (key === 'Backspace' && !visualEl) highlightKey('backspace');
       if (col > 0) { col--; play('space'); updateCarriage(); }
       return;
     }
-    if (key === 'ArrowRight') { col++; play('space'); updateCarriage(); return; }
+    if (key === 'ArrowRight') {
+      pendingContinuationRow = null;
+      const { maxCol } = getPaperCursorBounds();
+      if (col < maxCol) { col++; play('space'); updateCarriage(); }
+      return;
+    }
     if (key === 'Enter') {
+      pendingContinuationRow = null;
       if (!visualEl) highlightKey('enter');
-      row++; col = 0;
+      const { maxRow } = getPaperCursorBounds();
+      row = Math.min(maxRow, row + 1); col = 0;
       play('return');
       updateCarriage();
       return;
@@ -2066,6 +2570,137 @@
 
 
 
+  let mobilePaperPanelMode = 'sheets';
+
+  function extractPaperPreview(paper) {
+    const grid = paper.textGridData || {};
+    const rows = Object.keys(grid).map(Number).sort((a, b) => a - b);
+    if (rows.length) {
+      const parts = [];
+      rows.forEach(r => {
+        const cols = Object.keys(grid[r] || {}).map(Number).sort((a, b) => a - b);
+        if (!cols.length) return;
+        const maxCol = Math.max(...cols);
+        let line = '';
+        for (let c = 0; c <= maxCol; c++) line += grid[r]?.[c]?.char ?? ' ';
+        parts.push(line.trimEnd());
+      });
+      const preview = parts.join(' ').replace(/\s+/g, ' ').trim();
+      if (preview) return preview;
+    }
+
+    const chars = [...paper.querySelectorAll('.char:not(.continuation-marker)')]
+      .sort((a, b) => (parseFloat(a.style.top || 0) - parseFloat(b.style.top || 0)) || (parseFloat(a.style.left || 0) - parseFloat(b.style.left || 0)))
+      .map(el => el.textContent || '')
+      .join('')
+      .trim();
+    return chars || 'Folha sem texto';
+  }
+
+  function updateMobilePaperTools() {
+    const pages = [...deskStack.querySelectorAll('.paper.stacked')];
+    const badge = document.getElementById('mobile-sheets-count');
+    const trashBtn = document.getElementById('mobile-trash-btn');
+    if (badge) badge.textContent = String(pages.length);
+    if (trashBtn) trashBtn.disabled = pages.length === 0;
+    if (document.getElementById('mobile-paper-panel')?.classList.contains('open')) renderMobilePaperPanel();
+  }
+
+  function renderMobilePaperPanel() {
+    const list = document.getElementById('mobile-paper-list');
+    const title = document.getElementById('mobile-paper-panel-title');
+    const help = document.getElementById('mobile-paper-panel-help');
+    if (!list || !title || !help) return;
+
+    const pages = [...deskStack.querySelectorAll('.paper.stacked')];
+    title.textContent = mobilePaperPanelMode === 'trash' ? 'Lixeira' : 'Folhas guardadas';
+    help.textContent = mobilePaperPanelMode === 'trash'
+      ? 'Toque em uma folha para descartá-la.'
+      : 'Toque em uma folha para colocá-la novamente na máquina.';
+    list.innerHTML = '';
+
+    if (!pages.length) {
+      const empty = document.createElement('div');
+      empty.className = 'mobile-paper-empty';
+      empty.textContent = mobilePaperPanelMode === 'trash' ? 'Não há folhas para descartar.' : 'Nenhuma folha guardada na mesa.';
+      list.appendChild(empty);
+      return;
+    }
+
+    pages.forEach((paper, index) => {
+      const item = document.createElement('div');
+      item.className = 'mobile-paper-item';
+      item.setAttribute('role', 'button');
+      item.tabIndex = 0;
+
+      const thumb = document.createElement('span');
+      thumb.className = 'mobile-paper-thumb';
+      if (paper.classList.contains('texture-aged')) thumb.style.background = '#dfcdad';
+      else if (paper.classList.contains('texture-recycled')) thumb.style.background = '#d1cbbd';
+      else if (paper.classList.contains('texture-parchment')) thumb.style.background = '#e6cd9e';
+
+      const textWrap = document.createElement('span');
+      textWrap.className = 'mobile-paper-item-text';
+      const name = document.createElement('span');
+      name.className = 'mobile-paper-item-name';
+      name.textContent = `Folha ${index + 1}`;
+      const preview = document.createElement('span');
+      preview.className = 'mobile-paper-item-preview';
+      preview.textContent = extractPaperPreview(paper);
+      textWrap.append(name, preview);
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'mobile-paper-delete';
+      del.textContent = '🗑️';
+      del.setAttribute('aria-label', `Descartar Folha ${index + 1}`);
+
+      const discard = () => {
+        initAudio();
+        play('rip');
+        paper.remove();
+        updateMobilePaperTools();
+      };
+
+      item.addEventListener('click', () => {
+        if (mobilePaperPanelMode === 'trash') {
+          discard();
+        } else {
+          closeMobilePaperPanel();
+          stashCurrentPaperAndLoad(paper);
+          updateMobilePaperTools();
+        }
+      });
+
+      del.addEventListener('click', (e) => {
+        e.stopPropagation();
+        discard();
+      });
+
+      item.append(thumb, textWrap, del);
+      list.appendChild(item);
+    });
+  }
+
+  function openMobilePaperPanel(mode) {
+    mobilePaperPanelMode = mode === 'trash' ? 'trash' : 'sheets';
+    renderMobilePaperPanel();
+    const panel = document.getElementById('mobile-paper-panel');
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMobilePaperPanel() {
+    const panel = document.getElementById('mobile-paper-panel');
+    if (!panel) return;
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+
+  document.getElementById('mobile-sheets-btn')?.addEventListener('click', () => openMobilePaperPanel('sheets'));
+  document.getElementById('mobile-trash-btn')?.addEventListener('click', () => openMobilePaperPanel('trash'));
+  document.getElementById('mobile-paper-panel-close')?.addEventListener('click', closeMobilePaperPanel);
+
   function manualTearPaper() {
     if (!activePaper) return;
 
@@ -2082,6 +2717,7 @@
     isDrawing = false;
     currentPath = null;
     currentTool = 'typing';
+    pendingContinuationRow = null;
     refreshToolUI();
 
     setTimeout(() => {
@@ -2094,6 +2730,224 @@
   }
 
 
+
+  // ============================================================
+  // EXPORTAÇÃO VISUAL DA FOLHA — PNG e PDF
+  // ============================================================
+  const PAPER_SPECS = {
+    'size-a4':     { mmW: 210,   mmH: 297,   cssW: 595.276, cssH: 841.890, label: 'A4' },
+    'size-letter': { mmW: 215.9, mmH: 279.4, cssW: 612,     cssH: 792,     label: 'Carta' },
+    'size-note':   { mmW: 105,   mmH: 148,   cssW: 297.638, cssH: 419.528, label: 'Cartão' }
+  };
+
+  function getActivePaperSpec() {
+    if (!activePaper) return PAPER_SPECS['size-a4'];
+    const cls = Object.keys(PAPER_SPECS).find(c => activePaper.classList.contains(c));
+    return PAPER_SPECS[cls || 'size-a4'];
+  }
+
+  function getPaperBaseColor(paper = activePaper) {
+    if (!paper) return '#f4f0e6';
+    if (paper.classList.contains('texture-aged')) return '#dfcdad';
+    if (paper.classList.contains('texture-recycled')) return '#d1cbbd';
+    if (paper.classList.contains('texture-parchment')) return '#e6cd9e';
+    return '#f4f0e6';
+  }
+
+  function parseTransformOffsets(transformText) {
+    const result = { x: 0, y: 0, deg: 0 };
+    if (!transformText) return result;
+    const tr = transformText.match(/translate\(\s*(-?[\d.]+)px\s*,\s*(-?[\d.]+)px\s*\)/i);
+    if (tr) { result.x = parseFloat(tr[1]) || 0; result.y = parseFloat(tr[2]) || 0; }
+    const rr = transformText.match(/rotate\(\s*(-?[\d.]+)deg\s*\)/i);
+    if (rr) result.deg = parseFloat(rr[1]) || 0;
+    return result;
+  }
+
+  function renderActivePaperToCanvas(multiplier = 3) {
+    if (!activePaper) throw new Error('Nenhuma folha ativa.');
+
+    const spec = getActivePaperSpec();
+    const logicalW = activePaper.offsetWidth || spec.cssW;
+    const logicalH = activePaper.offsetHeight || spec.cssH;
+    const scale = Math.max(1, Number(multiplier) || 3);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(logicalW * scale);
+    canvas.height = Math.round(logicalH * scale);
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) throw new Error('Canvas indisponível neste navegador.');
+
+    ctx.scale(scale, scale);
+    ctx.fillStyle = getPaperBaseColor(activePaper);
+    ctx.fillRect(0, 0, logicalW, logicalH);
+
+    // Textura sutil sem depender de imagens externas.
+    if (activePaper.classList.contains('texture-aged') || activePaper.classList.contains('texture-recycled') || activePaper.classList.contains('texture-parchment')) {
+      ctx.save();
+      ctx.globalAlpha = activePaper.classList.contains('texture-aged') ? 0.05 : 0.03;
+      for (let y = 2; y < logicalH; y += 7) {
+        for (let x = (y % 13); x < logicalW; x += 11) {
+          const v = ((x * 17 + y * 31) % 19) / 19;
+          ctx.fillStyle = v > .52 ? '#5a4028' : '#ffffff';
+          ctx.fillRect(x, y, .55, .55);
+        }
+      }
+      ctx.restore();
+    }
+
+    const chars = [...activePaper.querySelectorAll('.char')];
+    for (const span of chars) {
+      const text = span.textContent || '';
+      if (!text) continue;
+
+      const x = parseFloat(span.style.left) || 0;
+      const y = parseFloat(span.style.top) || 0;
+      const t = parseTransformOffsets(span.style.transform);
+      const fontFamily = span.style.fontFamily || activePaper.dataset.font || "'Special Elite', monospace";
+      const isBold = span.classList.contains('bold') || span.classList.contains('continuation-marker');
+      const isItalic = span.classList.contains('italic');
+      const isUnderline = span.classList.contains('underline');
+      const opacity = parseFloat(span.style.opacity || '0.9');
+      const fontSize = 20;
+      const centerX = x + (CHAR_WIDTH / 2) + t.x;
+      const baselineY = y + fontSize + t.y;
+
+      ctx.save();
+      ctx.globalAlpha = Number.isFinite(opacity) ? opacity : .9;
+      ctx.translate(centerX, baselineY);
+      if (t.deg) ctx.rotate(t.deg * Math.PI / 180);
+      ctx.fillStyle = '#16171f';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.font = `${isItalic ? 'italic ' : ''}${isBold ? '700 ' : '400 '}${fontSize}px ${fontFamily}`;
+      ctx.fillText(text, 0, 0);
+      if (isUnderline) {
+        ctx.strokeStyle = '#16171f';
+        ctx.lineWidth = 1.3;
+        ctx.beginPath();
+        ctx.moveTo(-CHAR_WIDTH * .44, 3);
+        ctx.lineTo(CHAR_WIDTH * .44, 3);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // Desenhos feitos com o lápis.
+    const paths = [...activePaper.querySelectorAll('.drawing-layer path')];
+    for (const path of paths) {
+      const d = path.getAttribute('d');
+      if (!d || typeof Path2D === 'undefined') continue;
+      try {
+        const p = new Path2D(d);
+        ctx.save();
+        ctx.strokeStyle = path.getAttribute('stroke') || '#333b47';
+        ctx.lineWidth = parseFloat(path.getAttribute('stroke-width') || '2.5');
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke(p);
+        ctx.restore();
+      } catch (_) {}
+    }
+
+    return { canvas, spec, logicalW, logicalH };
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1200);
+  }
+
+  function exportPNG() {
+    if (!activePaper) return alert('Nenhuma folha ativa!');
+    try {
+      const { canvas, spec } = renderActivePaperToCanvas(3);
+      canvas.toBlob(blob => {
+        if (!blob) return alert('Não foi possível gerar o PNG neste navegador.');
+        downloadBlob(blob, `Manuscrito-${spec.label}.png`);
+      }, 'image/png');
+    } catch (err) {
+      console.error(err);
+      alert('Não foi possível exportar o PNG.');
+    }
+  }
+
+  function dataUrlToBytes(dataUrl) {
+    const base64 = dataUrl.split(',')[1] || '';
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  function concatByteArrays(parts) {
+    const total = parts.reduce((sum, p) => sum + p.length, 0);
+    const out = new Uint8Array(total);
+    let offset = 0;
+    for (const p of parts) { out.set(p, offset); offset += p.length; }
+    return out;
+  }
+
+  function buildImagePDF(jpegBytes, imageW, imageH, pageWPt, pageHPt) {
+    const enc = new TextEncoder();
+    const chunks = [];
+    const offsets = [0];
+    let length = 0;
+    const push = data => {
+      const bytes = typeof data === 'string' ? enc.encode(data) : data;
+      chunks.push(bytes);
+      length += bytes.length;
+    };
+
+    push('%PDF-1.4\n%âãÏÓ\n');
+    const addObj = (num, bodyParts) => {
+      offsets[num] = length;
+      push(`${num} 0 obj\n`);
+      for (const part of bodyParts) push(part);
+      push('\nendobj\n');
+    };
+
+    addObj(1, ['<< /Type /Catalog /Pages 2 0 R >>']);
+    addObj(2, ['<< /Type /Pages /Kids [3 0 R] /Count 1 >>']);
+    addObj(3, [`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWPt.toFixed(3)} ${pageHPt.toFixed(3)}] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>`]);
+
+    const content = `q\n${pageWPt.toFixed(3)} 0 0 ${pageHPt.toFixed(3)} 0 0 cm\n/Im0 Do\nQ\n`;
+    const contentBytes = enc.encode(content);
+    addObj(4, [`<< /Length ${contentBytes.length} >>\nstream\n`, contentBytes, '\nendstream']);
+
+    addObj(5, [
+      `<< /Type /XObject /Subtype /Image /Width ${imageW} /Height ${imageH} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBytes.length} >>\nstream\n`,
+      jpegBytes,
+      '\nendstream'
+    ]);
+
+    const xrefOffset = length;
+    push(`xref\n0 6\n0000000000 65535 f \n`);
+    for (let i = 1; i <= 5; i++) push(`${String(offsets[i]).padStart(10, '0')} 00000 n \n`);
+    push(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`);
+    return concatByteArrays(chunks);
+  }
+
+  function exportPDF() {
+    if (!activePaper) return alert('Nenhuma folha ativa!');
+    try {
+      const { canvas, spec } = renderActivePaperToCanvas(3);
+      const jpegBytes = dataUrlToBytes(canvas.toDataURL('image/jpeg', .96));
+      const pageWPt = spec.mmW * 72 / 25.4;
+      const pageHPt = spec.mmH * 72 / 25.4;
+      const pdfBytes = buildImagePDF(jpegBytes, canvas.width, canvas.height, pageWPt, pageHPt);
+      downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), `Manuscrito-${spec.label}.pdf`);
+    } catch (err) {
+      console.error(err);
+      alert('Não foi possível exportar o PDF.');
+    }
+  }
 
   // Exportar Word c/ Formatação Nativa
 
@@ -2206,9 +3060,9 @@
 
     // Margens reais em pixels de tela. Não são ampliadas/reduzidas junto
     // com a máquina, então o objeto nunca cola no notch ou nas bordas.
-    const sideGap = 6;
-    const topGap = 8;
-    const bottomGap = 10;
+    const sideGap = 3;
+    const topGap = 7;
+    const bottomGap = 8;
 
     const usableLeft = viewportLeft + Math.max(sideGap, safeLeft + 2);
     const usableRight = viewportRight - Math.max(sideGap, safeRight + 2);
@@ -2220,18 +3074,20 @@
 
     // Dimensões-base da composição. O teclado reforçado continua dentro
     // deste envelope e a folga lateral evita cortes por arredondamento.
-    const DESIGN_WIDTH = 912;
+    const DESIGN_WIDTH = 900;
     const DESIGN_HEIGHT = 684;
+    const emergedPaper = getPaperEmergenceDesign();
+    const TOTAL_VISIBLE_DESIGN_HEIGHT = DESIGN_HEIGHT + emergedPaper;
 
     const byWidth = availableWidth / DESIGN_WIDTH;
-    const byHeight = availableHeight / DESIGN_HEIGHT;
-    const scale = Math.max(0.12, Math.min(1, byWidth, byHeight));
-    const renderedHeight = DESIGN_HEIGHT * scale;
+    const byHeight = availableHeight / TOTAL_VISIBLE_DESIGN_HEIGHT;
+    const scale = Math.max(0.10, Math.min(1, byWidth, byHeight));
+    const renderedHeight = TOTAL_VISIBLE_DESIGN_HEIGHT * scale;
 
-    // Centraliza na área realmente visível, e não no layout viewport antigo.
+    // Centraliza o envelope inteiro: topo do papel já escrito + máquina.
     const centerX = usableLeft + availableWidth / 2;
     const extraY = Math.max(0, availableHeight - renderedHeight);
-    const top = usableTop + extraY / 2;
+    const top = usableTop + extraY / 2 + (emergedPaper * scale);
 
     root.style.setProperty('--mobile-stage-scale', scale.toFixed(5));
     root.style.setProperty('--mobile-stage-center-x', `${centerX.toFixed(2)}px`);
@@ -2257,6 +3113,7 @@
   // Restaura da nuvem local
 
   function initializeTypewriter() {
+    syncContinuationButton();
     applyResponsiveLayout();
 
     const savedHtml = storageGet('typewriter_html');
@@ -2273,6 +3130,7 @@
       stashCurrentPaperAndCreateNew();
     }
 
+    updateMobilePaperTools();
     setTimeout(applyResponsiveLayout, 60);
     setTimeout(applyResponsiveLayout, 250);
   }
